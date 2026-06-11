@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRATHIK · COSMOS — A Journey in Light-Years</title>
+<meta name="description" content="Prathik Ravichandran — Agentic AI Systems Engineer. A scroll through two continents, six cities, and a universe of agents.">
+<meta property="og:title" content="PRATHIK · COSMOS">
+<meta property="og:description" content="From Bangalore to Houston — a career told as a voyage through space.">
+<meta property="og:image" content="https://github.com/PrathikRavichandran.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='50' fill='%23020210'/><circle cx='50' cy='50' r='18' fill='%23ffd9a0'/><ellipse cx='50' cy='50' rx='38' ry='10' fill='none' stroke='%237c6cff' stroke-width='4'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --space:#020209; --ink:#e9ecff; --dim:#8b93c4; --dim2:#4a5180;
+  --gold:#ffd9a0; --violet:#7c6cff; --cyan:#5fd4ff; --rose:#ff7eb6; --green:#6fffb0;
+  --disp:'Syne',sans-serif; --body:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--space);color:var(--ink);font-family:var(--body);overflow-x:hidden}
+::selection{background:var(--violet);color:#fff}
+a{color:inherit;text-decoration:none}
+#space{position:fixed;inset:0;z-index:0}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(2,2,9,.75) 100%)}
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 34px;mix-blend-mode:screen}
+#hud .brand{font-family:var(--disp);font-weight:800;letter-spacing:.22em;font-size:14px}
+#hud .brand i{font-style:normal;color:var(--gold)}
+#hud .ly{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.18em}
+#hud .ly b{color:var(--cyan);font-weight:400}
+#progress{position:fixed;left:0;top:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--violet),var(--cyan));width:0;z-index:101;box-shadow:0 0 12px var(--violet)}
+/* chapter dots */
+#dots{position:fixed;right:26px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:14px}
+#dots a{width:7px;height:7px;border-radius:50%;border:1px solid var(--dim2);transition:all .3s;display:block}
+#dots a.on{background:var(--gold);border-color:var(--gold);box-shadow:0 0 10px var(--gold)}
+@media(max-width:760px){#dots{display:none}}
+/* sections */
+.ch{position:relative;z-index:10;min-height:100vh;display:flex;align-items:center;padding:120px 7vw}
+.cwrap{max-width:980px;width:100%}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;color:var(--gold);margin-bottom:22px;display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:42px;height:1px;background:var(--gold)}
+.ch h2{font-family:var(--disp);font-size:clamp(34px,5.6vw,72px);font-weight:800;line-height:1.04;letter-spacing:-.01em;margin-bottom:26px}
+.ch h2 .tint{background:linear-gradient(120deg,var(--gold),var(--rose),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ch .lead{font-size:clamp(14px,1.7vw,18px);line-height:2;color:var(--dim);max-width:640px;font-weight:300}
+.card{margin-top:34px;background:rgba(10,12,32,.55);border:1px solid rgba(124,108,255,.22);border-radius:14px;padding:34px;backdrop-filter:blur(14px)}
+.card .role{font-family:var(--disp);font-size:clamp(19px,2.4vw,26px);font-weight:700}
+.card .org{color:var(--cyan)}
+.card .meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;color:var(--dim);margin:10px 0 20px}
+.card ul{display:grid;gap:12px}
+.card li{list-style:none;font-size:13.5px;line-height:1.9;color:#c6cdf2;padding-left:24px;position:relative;font-weight:300}
+.card li::before{content:"✦";position:absolute;left:0;color:var(--violet);font-size:11px;top:4px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tags i{font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--dim);border:1px solid rgba(139,147,196,.3);border-radius:99px;padding:5px 12px}
+.rv{opacity:0;transform:translateY(44px);transition:opacity 1s cubic-bezier(.2,.7,.2,1),transform 1s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+/* hero */
+#hero{justify-content:center;text-align:center}
+#hero .cwrap{max-width:1100px}
+#hero h1{font-family:var(--disp);font-weight:800;font-size:clamp(46px,9vw,128px);line-height:.96;letter-spacing:-.02em}
+#hero h1 span{display:block}
+#hero h1 .grad{background:linear-gradient(120deg,var(--gold) 0%,var(--rose) 45%,var(--violet) 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#hero .sub{margin-top:30px;font-size:clamp(13px,1.8vw,18px);color:var(--dim);font-weight:300;letter-spacing:.04em}
+#hero .sub b{color:var(--ink);font-weight:500}
+#hero .scrollcue{margin-top:64px;font-family:var(--mono);font-size:10px;letter-spacing:.4em;color:var(--dim2);animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
+#hero .orbit-badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;color:var(--gold);border:1px solid rgba(255,217,160,.35);border-radius:99px;padding:10px 22px;margin-bottom:38px}
+#hero .orbit-badge .p{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* planets / projects */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:40px}
+.planet-card{background:rgba(10,12,32,.55);border:1px solid rgba(124,108,255,.22);border-radius:14px;padding:28px;backdrop-filter:blur(14px);transition:transform .4s cubic-bezier(.2,.7,.2,1),border-color .3s;position:relative;overflow:hidden}
+.planet-card:hover{transform:translateY(-8px);border-color:var(--cyan)}
+.planet-card .glow{position:absolute;top:-46px;right:-46px;width:130px;height:130px;border-radius:50%;filter:blur(34px);opacity:.5}
+.planet-card h3{font-family:var(--disp);font-size:21px;font-weight:700;display:flex;align-items:center;gap:12px}
+.planet-card h3 .pl{width:16px;height:16px;border-radius:50%;flex:none}
+.planet-card .tl{color:var(--cyan);font-size:12px;margin:8px 0 12px;letter-spacing:.04em}
+.planet-card p{font-size:12.5px;line-height:1.85;color:#b9c1e8;font-weight:300}
+.planet-card .links{margin-top:18px;display:flex;gap:18px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em}
+.planet-card .links a{color:var(--gold);border-bottom:1px solid transparent;transition:border .2s}
+.planet-card .links a:hover{border-color:var(--gold)}
+.planet-card .stat{margin-top:14px;font-family:var(--mono);font-size:9.5px;color:var(--green);letter-spacing:.18em}
+/* constellations / skills */
+.congrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:40px}
+.constellation{background:rgba(10,12,32,.55);border:1px solid rgba(124,108,255,.18);border-radius:14px;padding:26px;backdrop-filter:blur(10px)}
+.constellation h3{font-family:var(--mono);font-size:11px;letter-spacing:.26em;color:var(--gold);margin-bottom:16px}
+.constellation .stars{display:flex;flex-wrap:wrap;gap:9px}
+.constellation .stars span{font-size:12px;color:#c6cdf2;font-weight:300;display:flex;align-items:center;gap:7px}
+.constellation .stars span::before{content:"✦";color:var(--violet);font-size:9px}
+.constellation .stars span+span{margin-left:2px}
+/* comets / life */
+.comets{display:grid;gap:18px;margin-top:40px}
+.comet{display:flex;gap:22px;align-items:center;background:rgba(10,12,32,.5);border:1px solid rgba(124,108,255,.18);border-radius:99px;padding:18px 30px;backdrop-filter:blur(10px);transition:transform .35s,border-color .3s}
+.comet:hover{transform:translateX(14px);border-color:var(--gold)}
+.comet .ic{font-size:30px;filter:drop-shadow(0 0 12px rgba(255,217,160,.6))}
+.comet .nm{font-family:var(--disp);font-weight:700;font-size:16px;min-width:150px}
+.comet .nm em{display:block;font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--gold);margin-top:4px}
+.comet p{font-size:12.5px;color:#b9c1e8;line-height:1.7;font-weight:300}
+@media(max-width:680px){.comet{flex-direction:column;text-align:center;border-radius:20px}.comet .nm{min-width:0}}
+/* education */
+.edugrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+@media(max-width:760px){.edugrid{grid-template-columns:1fr}}
+.edu{background:rgba(10,12,32,.55);border:1px solid rgba(124,108,255,.22);border-radius:14px;padding:30px;backdrop-filter:blur(10px)}
+.edu .deg{font-family:var(--disp);font-weight:700;font-size:19px}
+.edu .sch{color:var(--cyan);font-size:13px;margin-top:8px}
+.edu .wn{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--dim);margin-top:12px}
+/* contact */
+#contact{text-align:center;justify-content:center}
+#contact h2{font-size:clamp(38px,6.5vw,86px)}
+#contact .lead{margin:0 auto}
+.cbtns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:48px}
+.cbtn{font-family:var(--mono);font-size:11px;letter-spacing:.22em;padding:17px 34px;border-radius:99px;border:1px solid rgba(124,108,255,.4);color:var(--ink);transition:all .3s;backdrop-filter:blur(8px)}
+.cbtn:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 30px -8px var(--gold);transform:translateY(-3px)}
+.cbtn.primary{background:linear-gradient(120deg,var(--gold),var(--rose));color:#1a0b25;border:0;font-weight:600}
+.cbtn.primary:hover{color:#1a0b25;box-shadow:0 0 44px -6px var(--rose)}
+#contact .small{margin-top:42px;font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--dim2);line-height:2.4}
+.swap{position:fixed;bottom:24px;left:24px;z-index:200;border:1px solid rgba(139,147,196,.35);background:rgba(2,2,9,.7);backdrop-filter:blur(10px);color:var(--dim);font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;padding:11px 18px;border-radius:99px;transition:all .25s}
+.swap:hover{color:var(--gold);border-color:var(--gold)}
+footer{position:relative;z-index:10;text-align:center;padding:30px;font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;color:var(--dim2)}
+footer a{color:var(--violet)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<canvas id="space"></canvas>
+<div class="vignette"></div>
+<div id="progress"></div>
+<div id="hud"><div class="brand">PRATHIK<i>·COSMOS</i></div><div class="ly">DISTANCE TRAVELED <b id="lyCount">0.000</b> LY</div></div>
+<div id="dots"></div>
+
+<!-- CH 0 · HERO -->
+<section class="ch" id="hero" data-ch="0">
+  <div class="cwrap">
+    <div class="orbit-badge rv"><span class="p"></span>TRANSMITTING FROM HOUSTON, TX · EARTH</div>
+    <h1 class="rv"><span>PRATHIK</span><span class="grad">RAVICHANDRAN</span></h1>
+    <p class="sub rv">Agentic AI Systems Engineer · <b>Medical Metrics, Inc.</b><br>
+    A journey across two continents — measured not in miles, but in <b>agents shipped to production.</b></p>
+    <div class="scrollcue rv">SCROLL TO BEGIN THE VOYAGE ▼</div>
+  </div>
+</section>
+
+<!-- CH 1 · ORIGIN -->
+<section class="ch" data-ch="1">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 01 · 2018 — 2021 · BANGALORE, INDIA</div>
+    <h2 class="rv">Origin <span class="tint">Star</span></h2>
+    <p class="lead rv">Every system has an initial condition. Mine: an Electronics & Communications degree at Sir M Visvesvaraya Institute of Technology, Bangalore — and a parallel life on the basketball court, playing at the <b style="color:var(--gold)">national level</b>. Circuits by day, fast breaks by night. Both taught the same lesson: great systems are about timing, signal, and trust between components.</p>
+    <div class="card rv"><div class="role">B.E. Electronics & Communications</div><div class="meta">SIR M VISVESVARAYA INSTITUTE OF TECHNOLOGY · 2018 — 2021</div>
+    <ul><li>Foundation in signals, systems, and the hardware beneath the software</li><li>National-level basketball — court vision that later became system vision</li></ul></div>
+  </div>
+</section>
+
+<!-- CH 2 · BINARY SYSTEM (COGNIZANT) -->
+<section class="ch" data-ch="2">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 02 · 2021 — 2023 · COGNIZANT, INDIA</div>
+    <h2 class="rv">The Binary <span class="tint">System</span></h2>
+    <p class="lead rv">Two roles orbiting one company — first machine learning at scale, then generative AI before the world knew its name.</p>
+    <div class="card rv"><div class="role">Machine Learning Engineer <span class="org">· Cognizant</span></div><div class="meta">SEP 2021 — NOV 2022 · INDIA</div>
+      <ul>
+        <li>End-to-end ML pipelines — PySpark distributed feature engineering, TensorFlow & scikit-learn: 85% model accuracy, manual review time down 40%</li>
+        <li>Multi-stage transformations across 10M+ record datasets; throughput up 50%</li>
+        <li>PySpark Streaming for real-time inference; Flask/FastAPI APIs at 100,000+ daily requests, sub-100ms</li>
+        <li>Mentored junior engineers — 30% improvement in team delivery velocity</li>
+      </ul>
+      <div class="tags"><i>PYSPARK</i><i>TENSORFLOW</i><i>SCIKIT-LEARN</i><i>10M+ RECORDS</i><i>SUB-100MS</i></div>
+    </div>
+    <div class="card rv"><div class="role">Generative AI Engineer <span class="org">· Cognizant</span></div><div class="meta">NOV 2022 — DEC 2023 · INDIA</div>
+      <ul>
+        <li>Enterprise RAG infrastructure: PySpark ETL on AWS EMR over large-scale financial datasets → Pinecone & Weaviate, powering GPT-4 and Claude applications</li>
+        <li>Productionized LLM workloads on AWS — Lambda, API Gateway, Step Functions, ECS, S3 — blue-green CI/CD, Docker, IAM governance</li>
+        <li>Preprocessing latency down 45% via PySpark DataFrame & Spark SQL optimization</li>
+        <li>MLOps monitoring with LangSmith + OpenTelemetry; enterprise safety guardrails</li>
+      </ul>
+      <div class="tags"><i>AWS EMR</i><i>PINECONE</i><i>WEAVIATE</i><i>LANGCHAIN</i><i>GPT-4</i><i>CLAUDE</i></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 3 · THE WORMHOLE -->
+<section class="ch" data-ch="3">
+  <div class="cwrap" style="text-align:center">
+    <div class="eyebrow rv" style="justify-content:center">CHAPTER 03 · 2024 · 14,000 KM</div>
+    <h2 class="rv">The <span class="tint">Wormhole</span></h2>
+    <p class="lead rv" style="margin:0 auto">One suitcase. One acceptance letter. One ocean.<br>Bangalore → Oklahoma City: the leap every immigrant engineer knows —<br>where everything familiar redshifts behind you, and everything possible blueshifts ahead.</p>
+    <div class="card rv" style="text-align:left"><div class="role">M.S. Data Analytics & AI</div><div class="meta">OKLAHOMA CITY UNIVERSITY · 2024 — 2025 · OKLAHOMA CITY, OK</div>
+      <ul><li>Graduate study at the exact moment agentic AI ignited — thesis-grade obsession with multi-agent systems</li><li>From international student to production AI engineer in under a year</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- CH 4 · FIVE-AGENT CONSTELLATION -->
+<section class="ch" data-ch="4">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 04 · FEB — DEC 2025 · DALLAS, TX</div>
+    <h2 class="rv">The Five-Agent <span class="tint">Constellation</span></h2>
+    <p class="lead rv">At EasyStones I drew my own constellation: five specialized agents — sales, inventory, pricing, marketing, cashflow — orbiting a supervisor, speaking A2A over MCP. A full business, run as a graph.</p>
+    <div class="card rv"><div class="role">Agentic & Generative AI Engineer <span class="org">· EasyStones</span></div><div class="meta">FEB 2025 — DEC 2025 · DALLAS, TX</div>
+      <ul>
+        <li>Architected a production multi-agent orchestration system from scratch with LangGraph — five specialized sub-agents with A2A communication via MCP and supervisor-governed collaboration policies</li>
+        <li>Hallucination control: retrieval-based fact-checking, confidence scoring, Model Armour guardrails, HITL escalation for high-stakes decisions</li>
+        <li>RAG pipelines with PySpark ETL on GCP Dataproc; Apache Iceberg tables on Azure Blob; indexed into Azure AI Search, Pinecone, ChromaDB, OpenSearch</li>
+        <li>LLMOps observability: LangSmith tracing, custom hallucination metrics, Grafana/CloudWatch dashboards, OpenTelemetry</li>
+        <li>FastAPI microservices, Pydantic-validated state on Azure Cosmos DB, asyncio throughout</li>
+        <li>Docker, Terraform, Kubernetes, Azure Functions & Container Apps — CI/CD across Azure, AWS, GCP</li>
+      </ul>
+      <div class="tags"><i>LANGGRAPH</i><i>MCP</i><i>A2A</i><i>HITL</i><i>ICEBERG</i><i>TERRAFORM</i><i>K8S</i><i>TRI-CLOUD</i></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 5 · MISSION CONTROL -->
+<section class="ch" data-ch="5">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 05 · APR 2026 — PRESENT · HOUSTON, TX</div>
+    <h2 class="rv">Mission <span class="tint">Control</span></h2>
+    <p class="lead rv">Houston. Of course it's Houston. At Medical Metrics, Inc. I build agentic AI for FDA-regulated clinical trials — where "move fast and break things" becomes <b style="color:var(--gold)">"move precisely and audit everything."</b></p>
+    <div class="card rv"><div class="role">Agentic AI Systems Engineer <span class="org">· Medical Metrics, Inc.</span></div><div class="meta">APR 2026 — PRESENT · HOUSTON, TX · HYBRID · REPORTS TO CTO & CHIEF COMPLIANCE OFFICER</div>
+      <ul>
+        <li>Architect production MCP server integrations connecting MMI's on-prem LLM to clinical databases, document repositories, and enterprise SaaS — natural-language data access for clinical and operations staff</li>
+        <li>Hybrid RAG pipelines: semantic chunking, confidence-gated outputs, citation-transparent answers — reliability for FDA-regulated medical imaging supporting pharma & biotech trials worldwide</li>
+        <li>FastAPI microservices with async processing, session-aware memory, RBAC, and structured observability (LangSmith, OpenTelemetry) from day one</li>
+        <li>Lead the org-wide Claude Code rollout — department-scoped Skills packaged as plugins for a 65-person organization; pairing directly with non-technical users</li>
+        <li>Engineered an org-wide Claude Code plugin with custom sub-agents — in active use across departments as a shared productivity primitive</li>
+        <li>ISO 27001, HIPAA, 21 CFR Part 11 — append-only audit logging, least-privilege tool access, HITL confirmation gates</li>
+      </ul>
+      <div class="tags"><i>MCP</i><i>HYBRID RAG</i><i>CLAUDE CODE</i><i>FASTAPI</i><i>HIPAA</i><i>ISO 27001</i><i>21 CFR PART 11</i></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 6 · PLANETARY SYSTEM (PROJECTS) -->
+<section class="ch" data-ch="6">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 06 · THE PLANETARY SYSTEM</div>
+    <h2 class="rv">Worlds I <span class="tint">Built</span></h2>
+    <p class="lead rv">Five planets, all with live atmospheres. Visit any of them — they're running right now.</p>
+    <div class="pgrid">
+      <div class="planet-card rv"><div class="glow" style="background:var(--green)"></div>
+        <h3><span class="pl" style="background:radial-gradient(circle at 30% 30%,#9fffce,#1d7a4d)"></span>Pathways</h3>
+        <div class="tl">Social-impact AI navigator for post-incarceration reentry</div>
+        <p>Conversational AI helping people leaving incarceration in Texas navigate housing, employment, legal rights, and benefits. Claude Code primitives over an explicit LangGraph state machine.</p>
+        <div class="stat">73/73 TESTS · LIVE IN PRODUCTION</div>
+        <div class="links"><a href="https://pathways-iota.vercel.app" target="_blank" rel="noopener">VISIT ↗</a><a href="https://github.com/PrathikRavichandran/pathways" target="_blank" rel="noopener">SOURCE ↗</a></div></div>
+      <div class="planet-card rv"><div class="glow" style="background:var(--cyan)"></div>
+        <h3><span class="pl" style="background:radial-gradient(circle at 30% 30%,#a8e8ff,#1d5a7a)"></span>Recrux.AI</h3>
+        <div class="tl">Autonomous multi-agent job search platform</div>
+        <p>Job discovery, resume tailoring, cover letters, and application submission — LangGraph agents with HITL checkpoints and Playwright browser automation.</p>
+        <div class="stat">SPLIT DEPLOY · HF SPACES + VERCEL</div>
+        <div class="links"><a href="https://recrux-ai.vercel.app" target="_blank" rel="noopener">VISIT ↗</a><a href="https://github.com/PrathikRavichandran/Recrux.AI" target="_blank" rel="noopener">SOURCE ↗</a></div></div>
+      <div class="planet-card rv"><div class="glow" style="background:var(--rose)"></div>
+        <h3><span class="pl" style="background:radial-gradient(circle at 30% 30%,#ffc1dd,#8a2e57)"></span>CharityAI</h3>
+        <div class="tl">Email-to-appointment autonomous pipeline</div>
+        <p>Nine isolated FastAPI agents over an A2A protocol — strict state machine, Postgres append-only audit log, Slack HITL gate, Gmail/Calendar integration.</p>
+        <div class="stat">9 AGENTS · APPEND-ONLY AUDIT</div>
+        <div class="links"><a href="https://prathik10-charityai-demo.hf.space" target="_blank" rel="noopener">VISIT ↗</a><a href="https://github.com/PrathikRavichandran/CharityAI" target="_blank" rel="noopener">SOURCE ↗</a></div></div>
+      <div class="planet-card rv"><div class="glow" style="background:var(--gold)"></div>
+        <h3><span class="pl" style="background:radial-gradient(circle at 30% 30%,#ffe9c4,#8a6a2e)"></span>PlantOps</h3>
+        <div class="tl">Plant-operator Q&A with hybrid retrieval</div>
+        <p>Hybrid ChromaDB + BM25 with RRF fusion, distance fallback, cited PDF previews. Routes every question to the right manual before answering.</p>
+        <div class="stat">CITATION-FIRST ANSWERS</div>
+        <div class="links"><a href="https://plantops.streamlit.app" target="_blank" rel="noopener">VISIT ↗</a><a href="https://github.com/PrathikRavichandran/PlantOps" target="_blank" rel="noopener">SOURCE ↗</a></div></div>
+      <div class="planet-card rv"><div class="glow" style="background:var(--violet)"></div>
+        <h3><span class="pl" style="background:radial-gradient(circle at 30% 30%,#cdc4ff,#46348a)"></span>PropAI</h3>
+        <div class="tl">Property-manager AI agent & dashboard</div>
+        <p>Real-estate portfolio dashboard — tenants, loans, escrow, maintenance — with Gemini-powered insights grounded in live data.</p>
+        <div class="stat">FULL-STACK TYPESCRIPT · REACT 19</div>
+        <div class="links"><a href="https://prathik10-propai.hf.space" target="_blank" rel="noopener">VISIT ↗</a><a href="https://github.com/PrathikRavichandran/PropAI" target="_blank" rel="noopener">SOURCE ↗</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 7 · CONSTELLATIONS (SKILLS) -->
+<section class="ch" data-ch="7">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 07 · STAR CHARTS</div>
+    <h2 class="rv">Constellations of <span class="tint">Craft</span></h2>
+    <p class="lead rv">Every star earned in production. Navigate by these.</p>
+    <div class="congrid">
+      <div class="constellation rv"><h3>AGENT ORCHESTRATION</h3><div class="stars"><span>LangGraph</span><span>LangChain</span><span>CrewAI</span><span>AutoGen</span><span>Claude Code — Skills · sub-agents · hooks · plugins</span><span>MCP</span><span>A2A</span><span>HITL</span><span>Tool Calling</span><span>RAG Pipelines</span></div></div>
+      <div class="constellation rv"><h3>LLMS & GENAI</h3><div class="stars"><span>Claude Sonnet / Opus</span><span>GPT-4</span><span>AWS Bedrock</span><span>Vector Embeddings</span><span>SPLADE Retrieval</span><span>Prompt & Context Engineering</span></div></div>
+      <div class="constellation rv"><h3>LANGUAGES</h3><div class="stars"><span>Python (Expert)</span><span>SQL</span><span>JavaScript</span><span>Bash</span><span>PySpark</span><span>Java (Working)</span></div></div>
+      <div class="constellation rv"><h3>APIS & SERVICES</h3><div class="stars"><span>FastAPI</span><span>Flask</span><span>Pydantic</span><span>REST Design</span><span>Async Processing</span><span>Session-Aware Memory</span></div></div>
+      <div class="constellation rv"><h3>CLOUD — TRI-SYSTEM</h3><div class="stars"><span>Azure: Databricks · AI Search · Cosmos DB · Functions · Container Apps</span><span>AWS: Bedrock · Lambda · ECS · EMR · S3 · Step Functions</span><span>GCP: Dataproc · Vertex AI · Cloud Run · GKE</span></div></div>
+      <div class="constellation rv"><h3>DEVOPS & MLOPS</h3><div class="stars"><span>Docker</span><span>Kubernetes</span><span>Terraform</span><span>GitHub Actions</span><span>LangSmith</span><span>OpenTelemetry</span><span>Grafana</span><span>CloudWatch</span></div></div>
+      <div class="constellation rv"><h3>DATA & VECTOR STORES</h3><div class="stars"><span>Pinecone</span><span>ChromaDB</span><span>Weaviate</span><span>OpenSearch</span><span>pgvector</span><span>PostgreSQL</span><span>Redis</span><span>Apache Iceberg</span><span>Spark SQL</span></div></div>
+      <div class="constellation rv"><h3>SECURITY & COMPLIANCE</h3><div class="stars"><span>HIPAA</span><span>ISO 27001</span><span>21 CFR Part 11</span><span>RBAC</span><span>Append-only Audit Logging</span><span>IAM / Secrets</span><span>HITL Gates</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 8 · COMETS (LIFE) -->
+<section class="ch" data-ch="8">
+  <div class="cwrap">
+    <div class="eyebrow rv">CHAPTER 08 · COMETS IN MY ORBIT</div>
+    <h2 class="rv">Life Beyond the <span class="tint">Terminal</span></h2>
+    <div class="comets">
+      <div class="comet rv"><span class="ic">🏀</span><span class="nm">Basketball<em>NATIONAL LEVEL · INDIA</em></span><p>Played at the national level back in India. Court vision, pressure, reading the floor — the same instincts now orchestrate agents instead of fast breaks.</p></div>
+      <div class="comet rv"><span class="ic">🏊</span><span class="nm">Swimming<em>DAILY ORBIT</em></span><p>Laps as meditation. The best debugging happens underwater.</p></div>
+      <div class="comet rv"><span class="ic">🏄</span><span class="nm">Surfing<em>STATUS: BETA</em></span><p>The newest mission. Wiping out gracefully since 2026 — every wave a retry with exponential backoff.</p></div>
+      <div class="comet rv"><span class="ic">✈️</span><span class="nm">Travel<em>TRAJECTORY: EXPANDING</em></span><p>Bangalore → Oklahoma City → Dallas → Houston so far. The map keeps growing.</p></div>
+      <div class="comet rv"><span class="ic">🎮</span><span class="nm">Xbox<em>ACHIEVEMENT HUNTER</em></span><p>Controller in hand when the agents sleep. Gamertag classified — beat me in a 1v1 to unlock it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CH 9 · CONTACT -->
+<section class="ch" id="contact" data-ch="9">
+  <div class="cwrap">
+    <div class="eyebrow rv" style="justify-content:center">FINAL CHAPTER · THE INVITATION</div>
+    <h2 class="rv">Open to the <span class="tint">Universe</span></h2>
+    <p class="lead rv">Recruiters, founders, fellow engineers, friendly wanderers — transmission lines are open.<br>Houston, TX · Work-authorized through early 2029 (F-1 OPT) · seeking long-term sponsorship.</p>
+    <div class="cbtns rv">
+      <a class="cbtn primary" href="mailto:prathik.ravichandran.work@gmail.com">SEND TRANSMISSION ✦</a>
+      <a class="cbtn" href="https://www.linkedin.com/in/prathik-ravichandran/" target="_blank" rel="noopener">LINKEDIN</a>
+      <a class="cbtn" href="https://github.com/PrathikRavichandran" target="_blank" rel="noopener">GITHUB</a>
+      <a class="cbtn" href="tel:+14052306755">VOICE: (405) 230-6755</a>
+    </div>
+    <div class="small rv">PRATHIK.RAVICHANDRAN.WORK@GMAIL.COM · HOUSTON, TX, EARTH<br>"RELIABILITY BEATS CAPABILITY. GUARDRAILS ARE A FEATURE."</div>
+  </div>
+</section>
+
+<footer>DESIGN 02 / COSMOS · © 2026 PRATHIK RAVICHANDRAN · <a href="../">⌂ SWITCH EXPERIENCE</a></footer>
+<a class="swap" href="../">⌂ 4 EXPERIENCES</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let three=false;
+try{
+const cv=document.getElementById('space');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x020209);scene.fog=new THREE.FogExp2(0x020209,0.0016);
+const cam=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,2000);
+function rs(){renderer.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix()}
+rs();addEventListener('resize',rs);
+/* ---- starfield (3 shells) ---- */
+function stars(n,spread,size,color,op){const g=new THREE.BufferGeometry();const p=new Float32Array(n*3);
+ for(let i=0;i<n*3;i+=3){p[i]=(Math.random()-.5)*spread;p[i+1]=(Math.random()-.5)*spread;p[i+2]=(Math.random()-.5)*spread*2.2-300}
+ g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ const m=new THREE.PointsMaterial({size,color,transparent:true,opacity:op,sizeAttenuation:true});
+ const pts=new THREE.Points(g,m);scene.add(pts);return pts}
+const s1=stars(2600,900,1.1,0xffffff,.85),s2=stars(1500,900,1.9,0x9fb7ff,.6),s3=stars(700,900,2.6,0xffd9a0,.5);
+/* ---- nebula sprites ---- */
+function glowTex(c1,c2){const cnv=document.createElement('canvas');cnv.width=cnv.height=256;const x=cnv.getContext('2d');
+ const g=x.createRadialGradient(128,128,0,128,128,128);g.addColorStop(0,c1);g.addColorStop(.4,c2);g.addColorStop(1,'rgba(0,0,0,0)');
+ x.fillStyle=g;x.fillRect(0,0,256,256);return new THREE.CanvasTexture(cnv)}
+const nebCols=[['rgba(124,108,255,.5)','rgba(124,108,255,.08)'],['rgba(95,212,255,.4)','rgba(95,212,255,.06)'],['rgba(255,126,182,.4)','rgba(255,126,182,.06)'],['rgba(255,217,160,.35)','rgba(255,217,160,.05)']];
+for(let i=0;i<14;i++){const t=glowTex(...nebCols[i%4]);const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false,opacity:.5}));
+ sp.position.set((Math.random()-.5)*460,(Math.random()-.5)*300,-(i*90)-120);const s=180+Math.random()*260;sp.scale.set(s,s,1);scene.add(sp)}
+/* ---- chapter landmarks along the path ---- */
+const CHZ=i=>-(i*130);
+function sphere(r,color,emiss,z,x=0,y=0){const m=new THREE.Mesh(new THREE.SphereGeometry(r,40,40),new THREE.MeshStandardMaterial({color,emissive:emiss,emissiveIntensity:1.4,roughness:.4}));m.position.set(x,y,z);scene.add(m);return m}
+scene.add(new THREE.AmbientLight(0x404060,1.2));
+const sun=new THREE.PointLight(0xffd9a0,1.4,600);sun.position.set(0,40,-40);scene.add(sun);
+/* ch1 origin star */
+const origin=sphere(9,0xff9a4d,0xff6a00,CHZ(1)-40,-46,8);
+/* ch2 binary */
+const b1=sphere(6,0x9fb7ff,0x4d6aff,CHZ(2)-40,44,16),b2=sphere(4.4,0xffd9a0,0xffa54d,CHZ(2)-40,62,2);
+/* ch3 wormhole rings */
+const rings=[];for(let i=0;i<9;i++){const r=new THREE.Mesh(new THREE.TorusGeometry(26+i*2.2,.34,12,80),
+ new THREE.MeshBasicMaterial({color:i%2?0x7c6cff:0x5fd4ff,transparent:true,opacity:.55-i*.04}));
+ r.position.set(0,0,CHZ(3)-30-i*13);scene.add(r);rings.push(r)}
+/* ch4 five-agent constellation */
+const constPts=[[-30,26],[30,30],[44,-8],[0,-30],[-44,-4]].map(([x,y],i)=>sphere(3.4,0x6fffb0,0x1dba6a,CHZ(4)-44,x,y));
+const conGeo=new THREE.BufferGeometry();const cps=[];constPts.forEach((p,i)=>{cps.push(p.position);cps.push(constPts[(i+1)%5].position)});
+conGeo.setFromPoints(cps);scene.add(new THREE.LineSegments(conGeo,new THREE.LineBasicMaterial({color:0x6fffb0,transparent:true,opacity:.4})));
+const hub=sphere(5,0xffffff,0x8888ff,CHZ(4)-44,0,2);
+/* ch5 station = icosahedron + ring */
+const station=new THREE.Group();
+const core=new THREE.Mesh(new THREE.IcosahedronGeometry(11,1),new THREE.MeshStandardMaterial({color:0x5fd4ff,emissive:0x1d5a7a,emissiveIntensity:1.2,wireframe:true}));
+const ring1=new THREE.Mesh(new THREE.TorusGeometry(19,.7,10,70),new THREE.MeshBasicMaterial({color:0xffd9a0,transparent:true,opacity:.8}));
+ring1.rotation.x=Math.PI/2.4;station.add(core);station.add(ring1);station.position.set(-40,6,CHZ(5)-40);scene.add(station);
+/* ch6 planetary system */
+const planets=[];const pCols=[[0x6fffb0,0x1d7a4d],[0x5fd4ff,0x1d5a7a],[0xff7eb6,0x8a2e57],[0xffd9a0,0x8a6a2e],[0x7c6cff,0x46348a]];
+const sysZ=CHZ(6)-50;const psun=sphere(7,0xfff2cc,0xffc966,sysZ,0,0);
+pCols.forEach((c,i)=>{const p=sphere(2.6+(i%3),c[0],c[1],sysZ,0,0);planets.push({m:p,r:16+i*9,sp:.5-i*.07,ph:i*1.3})});
+/* ch8 comets */
+const comets=[];for(let i=0;i<5;i++){const c=sphere(1.6,0xffffff,0xaad4ff,CHZ(8)-30-(i*8),-80-i*10,30-i*12);comets.push(c)}
+/* ---- scroll-driven camera ---- */
+let scrollT=0,targetZ=0,mx=0,my=0;
+addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
+function onScroll(){const max=document.body.scrollHeight-innerHeight;scrollT=max>0?scrollY/max:0;
+ document.getElementById('progress').style.width=(scrollT*100)+'%';
+ document.getElementById('lyCount').textContent=(scrollT*4.7).toFixed(3);
+ targetZ=scrollT*(CHZ(9)-40)}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+let t=0;
+(function anim(){t+=.008;
+ cam.position.z+=(targetZ-cam.position.z)*.06;
+ cam.position.x+=((mx*14)-cam.position.x)*.04;
+ cam.position.y+=((-my*10)-cam.position.y)*.04;
+ origin.rotation.y=t*2;b1.rotation.y=t*2;
+ const bo=t*1.4;b2.position.x=44+Math.cos(bo)*18;b2.position.z=CHZ(2)-40+Math.sin(bo)*18;
+ rings.forEach((r,i)=>{r.rotation.z=t*(i%2?1:-1)*.8;});
+ station.rotation.y=t*.9;ring1.rotation.z=t*.7;
+ planets.forEach(p=>{const a=t*p.sp+p.ph;p.m.position.x=Math.cos(a)*p.r;p.m.position.z=sysZ+Math.sin(a)*p.r*.5;p.m.rotation.y=t});
+ comets.forEach((c,i)=>{c.position.x+=.22+i*.05;if(c.position.x>120)c.position.x=-120});
+ s1.rotation.z=t*.012;s2.rotation.z=-t*.009;
+ renderer.render(scene,cam);
+ if(!RM)requestAnimationFrame(anim);else renderer.render(scene,cam)})();
+three=true;
+}catch(e){document.getElementById('space').style.background='radial-gradient(ellipse at 50% 0%,#1a1238 0%,#020209 60%)';console.warn('WebGL unavailable',e)}
+/* ---- reveals ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.rv').forEach(x=>io.observe(x));
+/* ---- chapter dots ---- */
+const chs=[...document.querySelectorAll('.ch')];const dots=document.getElementById('dots');
+chs.forEach((c,i)=>{const a=document.createElement('a');a.href='#';a.title='Chapter '+i;a.onclick=ev=>{ev.preventDefault();c.scrollIntoView({behavior:'smooth'})};dots.appendChild(a)});
+const dio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=chs.indexOf(e.target);[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===i))}}),{threshold:.5});
+chs.forEach(c=>dio.observe(c));
+</script>
+</body>
+</html>
