@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POWERS OF PRATHIK — One Engineer, Ten Orders of Magnitude</title>
+<meta name="description" content="A continuous zoom from Earth orbit to the quantum field — through the life, work, and code of Prathik Ravichandran.">
+<meta property="og:title" content="POWERS OF PRATHIK">
+<meta property="og:description" content="Scroll to fall: 10,000 km → 1 ångström, through one engineer's life.">
+<meta property="og:image" content="https://github.com/PrathikRavichandran.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23030308'/><circle cx='50' cy='50' r='34' fill='none' stroke='%237dd8ff' stroke-width='3'/><circle cx='50' cy='50' r='20' fill='none' stroke='%23ffb46b' stroke-width='3'/><circle cx='50' cy='50' r='7' fill='%23ff6ea8'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#030308; --txt:#e8edff; --dim:#8a93c0; --dim2:#474e78;
+  --cy:#7dd8ff; --am:#ffb46b; --pk:#ff6ea8; --gr:#7fffc4; --vi:#b69cff; --gd:#ffe9a0;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--void);color:var(--txt);font-family:var(--sans)}
+::selection{background:var(--pk);color:#fff}
+a{color:inherit;text-decoration:none}
+#rail{height:1150vh}
+#stage{position:fixed;inset:0;overflow:hidden;perspective:900px}
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;will-change:transform,opacity;pointer-events:none}
+.layer svg{width:min(92vmin,900px);height:min(92vmin,900px);overflow:visible}
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:flex-start;padding:18px 24px;pointer-events:none}
+#hud .t{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;font-weight:600}
+#hud .t b{color:var(--am)}
+#hud .t .sub{display:block;font-size:8.5px;color:var(--dim);letter-spacing:.3em;margin-top:5px;font-weight:300}
+#hud .exit{pointer-events:auto;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--dim);border:1px solid rgba(138,147,192,.35);border-radius:99px;padding:9px 16px;background:rgba(3,3,8,.6);backdrop-filter:blur(8px)}
+#hud .exit:hover{color:var(--am);border-color:var(--am)}
+/* ruler */
+#ruler{position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:0;pointer-events:none;font-family:var(--mono)}
+#ruler .tick{display:flex;align-items:center;gap:9px;height:30px;color:var(--dim2);font-size:8.5px;letter-spacing:.12em;transition:color .3s}
+#ruler .tick::before{content:"";width:14px;height:1px;background:currentColor}
+#ruler .tick.on{color:var(--am)}
+#ruler .tick.on::before{width:24px;height:2px}
+@media(max-width:760px){#ruler{display:none}}
+/* scale readout */
+#scale{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:50;text-align:center;pointer-events:none}
+#scale .m{font-family:var(--mono);font-size:clamp(20px,3.4vw,34px);font-weight:600;letter-spacing:.06em;color:var(--txt);text-shadow:0 0 30px rgba(125,216,255,.5)}
+#scale .e{font-family:var(--mono);font-size:9px;letter-spacing:.34em;color:var(--dim);margin-top:6px}
+/* caption card */
+#cap{position:fixed;right:24px;bottom:84px;z-index:50;width:min(360px,calc(100vw - 48px));background:rgba(6,7,18,.78);border:1px solid rgba(125,216,255,.22);border-radius:16px;padding:22px 24px;backdrop-filter:blur(16px);transition:opacity .45s,transform .45s;pointer-events:auto}
+#cap .k{font-family:var(--mono);font-size:8.5px;letter-spacing:.3em;margin-bottom:9px;text-transform:uppercase}
+#cap h2{font-size:21px;font-weight:700;letter-spacing:-.01em;margin-bottom:9px}
+#cap p{font-size:12px;line-height:1.85;color:#c4cdf0;font-weight:300}
+#cap p b{color:var(--gd);font-weight:600}
+#cap p a{color:var(--cy);border-bottom:1px dotted var(--cy)}
+#cap .cta{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+#cap .cta a{font-family:var(--mono);font-size:8.5px;letter-spacing:.18em;border:1px solid rgba(125,216,255,.4);border-radius:99px;padding:8px 14px;color:var(--cy)}
+#cap .cta a:hover{background:var(--cy);color:#001}
+#cap .cta a.hot{background:linear-gradient(120deg,var(--pk),var(--am));border:0;color:#1a0b18;font-weight:600}
+/* intro */
+#intro{position:fixed;inset:0;z-index:80;background:var(--void);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:24px;transition:opacity .9s,visibility .9s}
+#intro.done{opacity:0;visibility:hidden;pointer-events:none}
+#intro h1{font-size:clamp(28px,5.6vw,62px);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+#intro h1 b{background:linear-gradient(120deg,var(--cy),var(--vi),var(--pk));-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro p{font-family:var(--mono);font-size:clamp(9px,1.4vw,11px);letter-spacing:.26em;color:var(--dim);line-height:2.3;text-transform:uppercase}
+#intro .fall{margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--am);animation:bob 2.4s infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+.swap{position:fixed;bottom:22px;right:24px;z-index:60;font-family:var(--mono);font-size:8.5px;letter-spacing:.2em;color:var(--dim2)}
+.swap a{color:var(--dim)}.swap a:hover{color:var(--am)}
+@media(max-width:760px){#cap{bottom:78px;right:12px;left:12px;width:auto}#scale{bottom:18px}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+text{font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+<div id="rail"></div>
+<div id="stage"></div>
+
+<div id="hud">
+  <div class="t"><b>POWERS</b> OF PRATHIK<span class="sub">ONE ENGINEER · TEN ORDERS OF MAGNITUDE</span></div>
+  <a class="exit" href="../">⌂ EXIT VOYAGE</a>
+</div>
+<div id="ruler"></div>
+<div id="scale"><div class="m" id="scaleM">10,000 km</div><div class="e" id="scaleE">10^7 METERS · LOW EARTH ORBIT</div></div>
+<div id="cap"><div class="k" id="capK"></div><h2 id="capH"></h2><p id="capP"></p><div class="cta" id="capC"></div></div>
+
+<div id="intro">
+  <h1>You are 10,000 km above Earth.<br><b>One engineer is below.</b></h1>
+  <p>SCROLL TO FALL — THROUGH A PLANET, A STATE, A BUILDING, A LIFE,<br>A SCREEN, A CIRCUIT, A CELL, AND OUT THE OTHER SIDE.</p>
+  <div class="fall">▼ BEGIN DESCENT ▼</div>
+</div>
+<div class="swap"><a href="../">⌂ 6 EXPERIENCES · © 2026 PRATHIK RAVICHANDRAN</a></div>
+
+<script>
+/* ════════ LAYER ART (SVG strings, all centered on the next zoom target) ════════ */
+const SVGS={
+earth:`<svg viewBox="-450 -450 900 900">
+ <defs><radialGradient id="eg" cx=".38" cy=".34"><stop offset="0" stop-color="#1c3c66"/><stop offset=".55" stop-color="#0d1f3c"/><stop offset="1" stop-color="#060d1d"/></radialGradient>
+ <radialGradient id="at" cx=".5" cy=".5"><stop offset=".78" stop-color="rgba(125,216,255,0)"/><stop offset=".92" stop-color="rgba(125,216,255,.28)"/><stop offset="1" stop-color="rgba(125,216,255,0)"/></radialGradient></defs>
+ <circle r="440" fill="url(#at)"/><circle r="370" fill="url(#eg)" stroke="rgba(125,216,255,.35)" stroke-width="1.5"/>
+ <g opacity=".75" fill="#ffd58a">${Array.from({length:130},()=>{const a=Math.random()*6.28,r=Math.sqrt(Math.random())*340;return `<circle cx="${(Math.cos(a)*r).toFixed(0)}" cy="${(Math.sin(a)*r*.92).toFixed(0)}" r="${(Math.random()*1.8+.5).toFixed(1)}" opacity="${(.3+Math.random()*.7).toFixed(2)}"/>`}).join('')}</g>
+ <g><circle cx="208" cy="48" r="6" fill="#ffb46b"/><text x="222" y="52" fill="#ffb46b" font-size="15" letter-spacing="2">BANGALORE</text>
+ <circle cx="-150" cy="-12" r="7" fill="#7fffc4"/><text x="-138" y="-8" fill="#7fffc4" font-size="15" letter-spacing="2">TEXAS</text>
+ <path d="M208,48 C90,-150 -40,-150 -150,-12" fill="none" stroke="#ff6ea8" stroke-width="2" stroke-dasharray="7 8" opacity=".9"/>
+ <text x="10" y="-128" fill="#ff6ea8" font-size="12" letter-spacing="3" text-anchor="middle">ONE LEAP · 2024</text></g></svg>`,
+texas:`<svg viewBox="-450 -450 900 900">
+ <path d="M-205,-300 L-60,-300 L-58,-160 L130,-150 L185,-90 L260,-65 L255,15 L300,80 L235,160 L160,180 L90,300 L30,310 L-45,215 L-150,205 L-160,90 L-285,75 L-300,-40 L-210,-55 Z"
+  fill="rgba(20,32,64,.55)" stroke="#7dd8ff" stroke-width="2.5" stroke-linejoin="round"/>
+ <circle cx="60" cy="120" r="9" fill="#7fffc4"><animate attributeName="r" values="9;13;9" dur="2.4s" repeatCount="indefinite"/></circle>
+ <text x="80" y="126" fill="#7fffc4" font-size="19" letter-spacing="3">HOUSTON · NOW</text>
+ <circle cx="-30" cy="-60" r="6" fill="#b69cff"/><text x="-16" y="-55" fill="#b69cff" font-size="14" letter-spacing="2">DALLAS · 2025</text>
+ <circle cx="-15" cy="-330" r="6" fill="#ffb46b"/><text x="0" y="-325" fill="#ffb46b" font-size="14" letter-spacing="2">OKC · 2024</text>
+ <path d="M-15,-322 L-28,-72 M-32,-52 L52,112" stroke="rgba(255,180,107,.5)" stroke-width="1.6" stroke-dasharray="5 7"/>
+ <text x="0" y="395" fill="#474e78" font-size="13" letter-spacing="6" text-anchor="middle">THE TEXAS YEARS</text></svg>`,
+building:`<svg viewBox="-450 -450 900 900">
+ <rect x="-130" y="-360" width="260" height="720" rx="10" fill="#0b1226" stroke="rgba(125,216,255,.4)" stroke-width="2"/>
+ ${Array.from({length:14},(_,r)=>Array.from({length:5},(_,c)=>{const lit=Math.random()<.6;return `<rect x="${-98+c*42}" y="${-330+r*47}" width="26" height="28" rx="3" fill="${lit?'#ffd58a':'#131c36'}" opacity="${lit?(.5+Math.random()*.5).toFixed(2):1}"/>`}).join('')).join('')}
+ <rect x="-98" y="-44" width="194" height="28" rx="3" fill="#7fffc4" opacity=".95"/>
+ <text x="0" y="-58" fill="#7fffc4" font-size="13" letter-spacing="3" text-anchor="middle">HIS FLOOR — LIGHTS STILL ON</text>
+ <rect x="-178" y="-412" width="356" height="34" rx="17" fill="rgba(6,7,18,.85)" stroke="rgba(125,216,255,.3)"/>
+ <text x="0" y="-389" fill="#7dd8ff" font-size="15" letter-spacing="3" text-anchor="middle">MEDICAL METRICS, INC. · HOUSTON</text>
+ <text x="0" y="408" fill="#474e78" font-size="12" letter-spacing="5" text-anchor="middle">FDA-REGULATED AI LIVES HERE</text></svg>`,
+human:`<svg viewBox="-450 -450 900 900">
+ <rect x="-440" y="225" width="880" height="6" fill="rgba(125,216,255,.25)"/>
+ <rect x="-260" y="40" width="520" height="14" rx="7" fill="#16203c"/><rect x="-22" y="54" width="44" height="120" fill="#101830"/>
+ <g><rect x="-238" y="-120" width="200" height="130" rx="9" fill="#0a1124" stroke="#7dd8ff" stroke-width="2"/>
+  <circle cx="-138" cy="-78" r="13" fill="none" stroke="#7fffc4" stroke-width="2"/><circle cx="-188" cy="-40" r="9" fill="none" stroke="#ff6ea8" stroke-width="2"/><circle cx="-88" cy="-40" r="9" fill="none" stroke="#ffb46b" stroke-width="2"/>
+  <path d="M-145,-67 L-182,-48 M-131,-67 L-94,-48" stroke="#7dd8ff" stroke-width="1.6"/>
+  <text x="-138" y="-3" fill="#7dd8ff" font-size="10" letter-spacing="2" text-anchor="middle">AGENT GRAPH — LIVE</text></g>
+ <g><rect x="38" y="-130" width="200" height="140" rx="9" fill="#0a1124" stroke="#b69cff" stroke-width="2"/>
+  <text x="50" y="-104" fill="#7fffc4" font-size="11">$ claude</text><text x="50" y="-84" fill="#8a93c0" font-size="10">▸ skills: 12 loaded</text><text x="50" y="-66" fill="#8a93c0" font-size="10">▸ subagents: ready</text><text x="50" y="-48" fill="#8a93c0" font-size="10">▸ mcp: 4 servers ✓</text><text x="50" y="-26" fill="#ffb46b" font-size="10">all gates ARMED</text></g>
+ <g><circle cx="-330" cy="180" r="42" fill="#c2571f" stroke="#1a0b06" stroke-width="3"/><path d="M-372,180 H-288 M-330,138 V222 M-360,150 Q-330,180 -360,210 M-300,150 Q-330,180 -300,210" stroke="#1a0b06" stroke-width="3" fill="none"/>
+  <text x="-330" y="248" fill="#ffb46b" font-size="10" letter-spacing="2" text-anchor="middle">NATIONAL LEVEL</text></g>
+ <g transform="rotate(-18 350 60)"><rect x="318" y="-130" width="64" height="330" rx="32" fill="#13294a" stroke="#7dd8ff" stroke-width="2"/><path d="M350,-128 V198" stroke="rgba(125,216,255,.5)" stroke-width="2"/>
+  <text x="350" y="230" fill="#7dd8ff" font-size="10" letter-spacing="2" text-anchor="middle" transform="rotate(18 350 230)">SURF.BETA</text></g>
+ <g><rect x="120" y="150" width="92" height="60" rx="18" fill="#101830" stroke="#7fffc4" stroke-width="2"/><circle cx="146" cy="172" r="7" fill="#7fffc4"/><circle cx="186" cy="186" r="7" fill="#ff6ea8"/><circle cx="166" cy="179" r="4" fill="#ffb46b"/>
+  <text x="166" y="232" fill="#7fffc4" font-size="10" letter-spacing="2" text-anchor="middle">XBOX</text></g>
+ <g><ellipse cx="0" cy="-180" rx="34" ry="38" fill="#1b2a4d" stroke="#7dd8ff" stroke-width="2"/><path d="M-34,-148 C-50,-90 -40,-20 0,40 C40,-20 50,-90 34,-148" fill="#16203c" stroke="#7dd8ff" stroke-width="2"/>
+  <text x="0" y="-238" fill="#e8edff" font-size="13" letter-spacing="4" text-anchor="middle">THE ENGINEER · 1.0 m</text></g></svg>`,
+screen:`<svg viewBox="-450 -450 900 900">
+ <rect x="-420" y="-300" width="840" height="600" rx="18" fill="#070d1d" stroke="#7dd8ff" stroke-width="2"/>
+ <rect x="-420" y="-300" width="840" height="44" rx="18" fill="#0d1530"/>
+ <circle cx="-390" cy="-278" r="7" fill="#ff5f57"/><circle cx="-366" cy="-278" r="7" fill="#febc2e"/><circle cx="-342" cy="-278" r="7" fill="#28c840"/>
+ <text x="0" y="-271" fill="#8a93c0" font-size="13" letter-spacing="2" text-anchor="middle">claude — ~/mmi/agents — daily driver</text>
+ <g font-size="15.5" letter-spacing="1">
+  <text x="-390" y="-212" fill="#7fffc4">$ claude "wire the new clinical MCP server"</text>
+  <text x="-390" y="-176" fill="#8a93c0">▸ plan: 6 steps · skills: [fastapi, mcp-builder, rbac]</text>
+  <text x="-390" y="-140" fill="#8a93c0">▸ subagent: compliance-reviewer … <tspan fill="#7fffc4">PASS</tspan></text>
+  <text x="-390" y="-104" fill="#8a93c0">▸ audit_log: append-only ✓ citations ✓ HITL ✓</text>
+  <text x="-390" y="-68" fill="#b69cff">⏺ LangGraph state machine compiled — 0 errors</text>
+  <text x="-390" y="-32" fill="#8a93c0">▸ tests: <tspan fill="#7fffc4">73/73 passing</tspan> (pathways suite)</text>
+  <text x="-390" y="4" fill="#ffb46b">⚠ HITL gate: deploy to prod? [y/N]</text>
+  <text x="-390" y="40" fill="#e8edff">y ▌</text>
+  <text x="-390" y="100" fill="#474e78" font-size="12">stack: LangGraph · CrewAI · AutoGen · MCP · A2A · FastAPI · Pydantic</text>
+  <text x="-390" y="128" fill="#474e78" font-size="12">memory: Pinecone · ChromaDB · Weaviate · OpenSearch · pgvector · Iceberg</text>
+  <text x="-390" y="156" fill="#474e78" font-size="12">clouds: Azure ▸ AWS ▸ GCP — all in production</text>
+  <text x="-390" y="184" fill="#474e78" font-size="12">eyes: LangSmith · OpenTelemetry · Grafana · CloudWatch</text></g>
+ <text x="0" y="262" fill="#474e78" font-size="12" letter-spacing="5" text-anchor="middle">10 CM — WHERE THE WORK ACTUALLY HAPPENS</text></svg>`,
+pcb:`<svg viewBox="-450 -450 900 900">
+ <rect x="-440" y="-440" width="880" height="880" rx="22" fill="#06150f"/>
+ <g stroke="#1f8a5c" stroke-width="3" fill="none" opacity=".85">
+  <path d="M-440,-300 H-160 V-80 H-60"/><path d="M-440,0 H-220 V160 H-70"/><path d="M-440,300 H-180 V80"/>
+  <path d="M440,-300 H160 V-120 H60"/><path d="M440,40 H230 V-40 H70"/><path d="M440,300 H190 V140 H70"/>
+  <path d="M-300,-440 V-260"/><path d="M0,-440 V-160"/><path d="M300,-440 V-240"/><path d="M-100,440 V200"/><path d="M120,440 V210"/>
+ </g>
+ <g fill="#0c2c1e" stroke="#2ea372" stroke-width="2">
+  <rect x="-330,-360" width="0" height="0"/><rect x="-340" y="-350" width="90" height="56" rx="5"/><rect x="240" y="-370" width="110" height="64" rx="5"/><rect x="-360" y="240" width="120" height="70" rx="5"/><rect x="250" y="200" width="100" height="90" rx="5"/></g>
+ <rect x="-110" y="-110" width="220" height="220" rx="10" fill="#0a1f16" stroke="#7fffc4" stroke-width="3"/>
+ ${Array.from({length:9},(_,i)=>`<line x1="${-88+i*22}" y1="-110" x2="${-88+i*22}" y2="-132" stroke="#7fffc4" stroke-width="3"/><line x1="${-88+i*22}" y1="110" x2="${-88+i*22}" y2="132" stroke="#7fffc4" stroke-width="3"/>`).join('')}
+ <text x="0" y="-22" fill="#7fffc4" font-size="20" letter-spacing="4" text-anchor="middle">B.E. — ECE</text>
+ <text x="0" y="8" fill="#8a93c0" font-size="12" letter-spacing="2" text-anchor="middle">SIR M VISVESVARAYA</text>
+ <text x="0" y="30" fill="#8a93c0" font-size="12" letter-spacing="2" text-anchor="middle">INST. OF TECHNOLOGY</text>
+ <text x="0" y="58" fill="#ffb46b" font-size="12" letter-spacing="3" text-anchor="middle">BANGALORE 2018–21</text>
+ <text x="0" y="412" fill="#2ea372" font-size="12" letter-spacing="5" text-anchor="middle">IT ALL STARTED WITH ELECTRONICS</text></svg>`,
+silicon:`<svg viewBox="-450 -450 900 900">
+ <rect x="-440" y="-440" width="880" height="880" fill="#0a0a18"/>
+ <g stroke="rgba(182,156,255,.4)" stroke-width="1.4">${Array.from({length:10},(_,i)=>`<line x1="${-440+i*98}" y1="-440" x2="${-440+i*98}" y2="440"/><line x1="-440" y1="${-440+i*98}" x2="440" y2="${-440+i*98}"/>`).join('')}</g>
+ ${["LANGGRAPH","MCP","CLAUDE CODE","CREWAI","AUTOGEN","FASTAPI","PYDANTIC","PYTHON","PYSPARK","PINECONE","CHROMADB","WEAVIATE","AZURE","AWS","GCP","DOCKER","K8S","TERRAFORM","LANGSMITH","OTEL","HIPAA","RAG","A2A","HITL","SQL"].map((s,i)=>{const c=i%5,r=(i/5)|0;const x=-392+c*196,y=-392+r*196;const cols=["#b69cff","#7dd8ff","#7fffc4","#ffb46b","#ff6ea8"];
+  return `<g><rect x="${x-72}" y="${y-30}" width="144" height="60" rx="7" fill="rgba(20,18,44,.9)" stroke="${cols[(i+r)%5]}" stroke-width="1.6"/><text x="${x}" y="${y+5}" fill="${cols[(i+r)%5]}" font-size="13.5" letter-spacing="1.5" text-anchor="middle">${s}</text></g>`}).join('')}
+ <text x="0" y="430" fill="#474e78" font-size="12" letter-spacing="5" text-anchor="middle">1 µm — SKILLS, ETCHED PERMANENTLY</text></svg>`,
+dna:`<svg viewBox="-450 -450 900 900">
+ ${(()=>{let s='';const word="RELIABILITY";const word2="GUARDRAILS·";
+  for(let i=0;i<22;i++){const y=-396+i*38;const ph=i*.55;const x1=Math.sin(ph)*150,x2=Math.sin(ph+3.14)*150;
+   const ch=word[i%11],ch2=word2[i%11];
+   const front=Math.cos(ph)>0;
+   s+=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="rgba(125,216,255,.4)" stroke-width="2.5"/>
+   <text x="${(x1+x2)/2-12}" y="${y-5}" fill="#ffb46b" font-size="14" letter-spacing="2">${ch}</text>
+   <text x="${(x1+x2)/2+12}" y="${y-5}" fill="#7fffc4" font-size="14" letter-spacing="2" text-anchor="end">${ch2}</text>
+   <circle cx="${x1}" cy="${y}" r="${front?9:6}" fill="${front?'#ff6ea8':'#8a4f6e'}"/>
+   <circle cx="${x2}" cy="${y}" r="${front?6:9}" fill="${front?'#5a7fbf':'#7dd8ff'}"/>`}
+  return s})()}
+ <text x="0" y="438" fill="#474e78" font-size="12" letter-spacing="5" text-anchor="middle">1 NM — WHAT HE'S ACTUALLY MADE OF</text></svg>`,
+quantum:`<svg viewBox="-450 -450 900 900">
+ <defs><radialGradient id="qg"><stop offset="0" stop-color="rgba(255,110,168,.5)"/><stop offset="1" stop-color="rgba(255,110,168,0)"/></radialGradient></defs>
+ ${Array.from({length:90},()=>{const a=Math.random()*6.28,r=Math.random()*430;const x=(Math.cos(a)*r).toFixed(0),y=(Math.sin(a)*r).toFixed(0);
+  const c=["#7dd8ff","#ff6ea8","#7fffc4","#ffb46b","#b69cff"][(Math.random()*5)|0];
+  return `<circle cx="${x}" cy="${y}" r="${(Math.random()*3+.8).toFixed(1)}" fill="${c}" opacity="${(.2+Math.random()*.8).toFixed(2)}"><animate attributeName="opacity" values="0.1;1;0.1" dur="${(1.5+Math.random()*3).toFixed(1)}s" repeatCount="indefinite"/></circle>`}).join('')}
+ <circle r="180" fill="url(#qg)"/>
+ <text x="0" y="-30" fill="#e8edff" font-size="25" letter-spacing="2" text-anchor="middle" font-weight="600">At the bottom, everything</text>
+ <text x="0" y="8" fill="#e8edff" font-size="25" letter-spacing="2" text-anchor="middle" font-weight="600">is probability.</text>
+ <text x="0" y="62" fill="#ffb46b" font-size="19" letter-spacing="2" text-anchor="middle">He just adds guardrails.</text></svg>`};
+/* ════════ CHAPTERS ════════ */
+const CH=[
+ {key:'earth',e:7,unit:'10,000 km',sub:'10^7 METERS · LOW EARTH ORBIT',col:'#7dd8ff',k:'CHAPTER 1 · THE PLANET',h:'Two homes, one orbit',
+  p:`From up here there are no borders — just city lights. Two of them matter: <b>Bangalore</b>, where Prathik Ravichandran was built, and <b>Texas</b>, where he builds. The pink arc is 2024: one suitcase, one acceptance letter, 14,000 km of nerve.`},
+ {key:'texas',e:5,unit:'100 km',sub:'10^5 METERS · STATE SCALE',col:'#7fffc4',k:'CHAPTER 2 · THE STATE',h:'The Texas years',
+  p:`<b>OKC 2024</b> — M.S. Data Analytics & AI at Oklahoma City University. <b>Dallas 2025</b> — EasyStones: a five-agent LangGraph system run like a tiny company. <b>Houston, now</b> — Medical Metrics, where the agents answer to federal regulators.`},
+ {key:'building',e:2,unit:'100 m',sub:'10^2 METERS · ONE BUILDING',col:'#ffd58a',k:'CHAPTER 3 · THE BUILDING',h:'Medical Metrics, Inc.',
+  p:`Inside: an <b>Agentic AI Systems Engineer</b> wiring MCP servers to clinical databases, shipping hybrid RAG with citation-transparent answers for <b>FDA-regulated</b> imaging trials, and rolling Claude Code out to <b>65 people</b>. He reports to the CTO <b>and</b> the Chief Compliance Officer. His floor's lights are still on.`},
+ {key:'human',e:0,unit:'1 m',sub:'10^0 METERS · ONE ENGINEER',col:'#e8edff',k:'CHAPTER 4 · THE ENGINEER',h:'Prathik, 1:1 scale',
+  p:`4+ years of production agentic AI across healthcare, SaaS, and fintech. Around him: the agent graph he's orchestrating, a <b>national-level basketball</b> (India), a surfboard in beta, and an Xbox controller for when the agents sleep. Swims daily — claims the best debugging happens underwater.`},
+ {key:'screen',e:-1,unit:'10 cm',sub:'10^-1 METERS · THE SCREEN',col:'#b69cff',k:'CHAPTER 5 · THE WORK',h:'Daily driver: Claude Code',
+  p:`Skills, sub-agents, hooks, plugins, MCP servers — composed into workflows where every consequential action hits a <b>HITL gate</b> and every answer carries citations. Note the test count: <b>73/73</b>. Always 73/73.`},
+ {key:'pcb',e:-3,unit:'1 mm',sub:'10^-3 METERS · THE CIRCUIT',col:'#7fffc4',k:'CHAPTER 6 · THE ORIGIN',h:'It started with electronics',
+  p:`Before the agents: <b>B.E. Electronics & Communications</b>, Sir M Visvesvaraya Institute of Technology, Bangalore (2018–21). Then four years at <b>Cognizant</b> — ML pipelines across 10M+ records at sub-100ms, then enterprise RAG on AWS for financial services. He learned what silicon <i>is</i> before teaching it to reason.`},
+ {key:'silicon',e:-6,unit:'1 µm',sub:'10^-6 METERS · THE DIE',col:'#b69cff',k:'CHAPTER 7 · THE INSTRUCTION SET',h:'Skills, etched permanently',
+  p:`Zoom into the die and the instruction set is exposed: <b>LangGraph · CrewAI · AutoGen · MCP · Claude Code</b> for orchestration, <b>Python (expert)</b> and FastAPI to build, Pinecone-to-pgvector for memory, three clouds in production, LangSmith + OpenTelemetry for eyes, <b>HIPAA / ISO 27001 / 21 CFR Part 11</b> for spine.`},
+ {key:'dna',e:-9,unit:'1 nm',sub:'10^-9 METERS · THE CODE',col:'#ff6ea8',k:'CHAPTER 8 · THE SOURCE CODE',h:'Read the base pairs',
+  p:`Sequence the strand and it spells out his operating principles: <b>RELIABILITY</b> beats capability. <b>GUARDRAILS</b> are a feature. Citations or silence. AI for everyone — from clinical staff to Texans rebuilding after incarceration (<a href="https://pathways-iota.vercel.app" target="_blank">Pathways — live, 73/73</a>).`},
+ {key:'quantum',e:-10.6,unit:'1 Å',sub:'10^-10 METERS · THE FIELD',col:'#ffb46b',k:'FINAL CHAPTER · THE BOTTOM',h:'Hire the whole stack',
+  p:`You just fell through ten orders of magnitude and every layer was the same person. Houston, TX · work-authorized through early 2029 (F-1 OPT) · seeking long-term sponsorship.`,
+  cta:[['mailto:prathik.ravichandran.work@gmail.com','EMAIL HIM','hot'],['https://www.linkedin.com/in/prathik-ravichandran/','LINKEDIN',''],['https://github.com/PrathikRavichandran','GITHUB',''],['tel:+14052306755','(405) 230-6755','']]}];
+/* ════════ BUILD LAYERS ════════ */
+const stage=document.getElementById('stage');
+const layers=CH.map(c=>{const d=document.createElement('div');d.className='layer';d.innerHTML=SVGS[c.key];stage.appendChild(d);return d});
+/* ruler */
+const ruler=document.getElementById('ruler');
+const ticks=[7,5,2,0,-1,-3,-6,-9,-10.6].map((e,i)=>{const t=document.createElement('div');t.className='tick';t.textContent='10^'+(e===-10.6?'-10':e)+' m';ruler.appendChild(t);return {t,e}});
+/* ════════ SCROLL → EXPONENT ════════ */
+const K0=7.9,K1=-11.4;
+let k=K0,kT=K0;
+function onScroll(){const max=document.body.scrollHeight-innerHeight;const p=max>0?scrollY/max:0;kT=K0+(K1-K0)*p;
+ if(p>0.005)document.getElementById('intro').classList.add('done')}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+const capEl=document.getElementById('cap');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(){
+ k+=(kT-k)*(RM?1:.07);
+ let best=0,bd=1e9;
+ CH.forEach((c,i)=>{
+  const s=Math.pow(10,(c.e-k)/2.2);   /* softened exponent for graceful overlap */
+  const L=layers[i];
+  if(s<.02||s>60){L.style.display='none'}
+  else{L.style.display='flex';
+   L.style.transform=`scale(${s})`;
+   let o=1;
+   if(s<.30)o=(s-.02)/.28; else if(s>3.4)o=Math.max(0,1-(s-3.4)/9);
+   L.style.opacity=Math.max(0,Math.min(1,o)).toFixed(3);
+   L.style.filter=s>3.4?`blur(${Math.min(14,(s-3.4))}px)`:'none';}
+  const d=Math.abs(c.e-k);if(d<bd){bd=d;best=i}});
+ /* HUD */
+ const c=CH[best];
+ document.getElementById('scaleM').textContent=c.unit;
+ document.getElementById('scaleE').textContent=c.sub;
+ ticks.forEach(({t,e})=>t.classList.toggle('on',Math.abs(e-c.e)<.01));
+ if(capEl.dataset.k!==c.key){capEl.dataset.k=c.key;
+  capEl.style.opacity=0;capEl.style.transform='translateY(12px)';
+  setTimeout(()=>{document.getElementById('capK').textContent=c.k;
+   document.getElementById('capK').style.color=c.col;
+   document.getElementById('capH').textContent=c.h;
+   document.getElementById('capP').innerHTML=c.p;
+   const cc=document.getElementById('capC');cc.innerHTML='';
+   (c.cta||[]).forEach(([href,lab,cls])=>{const a=document.createElement('a');a.href=href;a.textContent=lab;a.className=cls;if(href.startsWith('http')){a.target='_blank';a.rel='noopener'}cc.appendChild(a)});
+   capEl.style.opacity=1;capEl.style.transform='none';},240)}
+ requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
