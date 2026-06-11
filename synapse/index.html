@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRATHIK://SYNAPSE — A Neural Network Trained on One Human</title>
+<meta name="description" content="Interrogate Prathik Ravichandran's mind: a living neural network where every neuron is a real memory. Ask a question, watch the forward pass.">
+<meta property="og:title" content="PRATHIK://SYNAPSE">
+<meta property="og:description" content="Every neuron is a real memory. Ask a question. Watch the forward pass.">
+<meta property="og:image" content="https://github.com/PrathikRavichandran.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23050510'/><circle cx='30' cy='50' r='7' fill='%2366ddff'/><circle cx='70' cy='30' r='7' fill='%23ffd166'/><circle cx='70' cy='70' r='7' fill='%23ff6ea8'/><path d='M36 47 64 32M36 53 64 68' stroke='%2366ddff' stroke-width='3' opacity='.7'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#050510; --panel:rgba(10,12,28,.78); --line:rgba(120,140,255,.16); --line2:rgba(120,140,255,.4);
+  --cy:#66ddff; --am:#ffd166; --vi:#a78bfa; --gr:#5dffa8; --pk:#ff6ea8; --gd:#ffe9a0; --wt:#eef2ff;
+  --txt:#dfe6ff; --dim:#8a93c4; --dim2:#4a5180;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--void);color:var(--txt);font-family:var(--sans);overflow:hidden}
+::selection{background:var(--cy);color:#001}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--mono);cursor:pointer}
+#mind{position:fixed;inset:0;z-index:1}
+#tip{position:fixed;z-index:50;pointer-events:none;background:rgba(8,10,24,.92);border:1px solid var(--line2);border-radius:10px;padding:10px 14px;max-width:280px;opacity:0;transition:opacity .15s;backdrop-filter:blur(8px)}
+#tip .l{font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:5px}
+#tip .f{font-size:12px;line-height:1.6;color:var(--txt)}
+/* top bar */
+#bar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:14px 22px;background:linear-gradient(180deg,rgba(5,5,16,.92),rgba(5,5,16,0));pointer-events:none}
+#bar>*{pointer-events:auto}
+#bar .brand{font-family:var(--mono);font-size:12px;letter-spacing:.18em;font-weight:600}
+#bar .brand b{color:var(--cy);font-weight:600}
+#bar .brand .sub{display:block;font-size:8.5px;color:var(--dim);letter-spacing:.26em;margin-top:4px;font-weight:300}
+#bar .r{display:flex;gap:14px;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--dim)}
+#bar .r .led{width:7px;height:7px;border-radius:50%;background:var(--gr);box-shadow:0 0 9px var(--gr);animation:pl 2.2s infinite}
+@keyframes pl{0%,100%{opacity:1}50%{opacity:.25}}
+#bar .r a{color:var(--am)}
+/* console */
+#console{position:fixed;z-index:30;left:18px;top:84px;bottom:64px;width:min(380px,calc(100vw - 36px));display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(18px);overflow:hidden}
+#chead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--dim);text-transform:uppercase}
+#chead::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cy);box-shadow:0 0 8px var(--cy)}
+#cout{flex:1;overflow-y:auto;padding:16px;font-size:12.5px;line-height:1.85}
+#cout::-webkit-scrollbar{width:8px}#cout::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:8px}
+.block{margin-bottom:18px;animation:bIn .4s both}
+@keyframes bIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.block .q{font-family:var(--mono);font-size:10px;color:var(--am);letter-spacing:.08em;margin-bottom:8px}
+.block .q::before{content:"▸ stimulus: "}
+.block .a{color:var(--txt);white-space:pre-wrap}
+.block .a b{color:var(--gd);font-weight:600}
+.block .a a{color:var(--cy);border-bottom:1px dotted var(--cy)}
+.block .dream{color:var(--dim);font-style:italic}
+.block .rep{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px;font-family:var(--mono);font-size:9px;line-height:2;color:var(--dim)}
+.block .rep .rl{display:flex;justify-content:space-between;gap:8px}
+.block .rep .rl i{font-style:normal;color:var(--dim2)}
+.block .rep .bar{display:inline-block;height:5px;border-radius:3px;background:var(--cy);vertical-align:middle;margin-right:7px}
+#chips{display:flex;flex-wrap:wrap;gap:7px;padding:0 14px 10px}
+.chip{font-size:9.5px;letter-spacing:.06em;padding:7px 12px;border-radius:99px;border:1px solid var(--line);color:var(--dim);background:rgba(255,255,255,.03);transition:all .2s}
+.chip:hover{color:var(--txt);border-color:var(--cy)}
+#crow{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+#cin{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--txt);font-family:var(--sans);font-size:12.5px;outline:0;min-width:0}
+#cin:focus{border-color:var(--cy)}
+#csend{background:linear-gradient(120deg,var(--cy),var(--vi));border:0;border-radius:10px;color:#001;font-size:10px;letter-spacing:.12em;padding:0 16px;font-weight:600}
+/* bottom strip */
+#strip{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 22px;background:linear-gradient(0deg,rgba(5,5,16,.94),rgba(5,5,16,0));font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--dim);pointer-events:none}
+#strip>*{pointer-events:auto}
+#strip .links{display:flex;gap:16px}
+#strip .links a:hover{color:var(--cy)}
+#strip .hint{color:var(--dim2);letter-spacing:.14em}
+/* control buttons */
+#ctrls{position:fixed;right:18px;top:84px;z-index:35;display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+.cbtn{border:1px solid var(--line2);background:var(--panel);backdrop-filter:blur(12px);color:var(--dim);font-size:9px;letter-spacing:.18em;padding:10px 15px;border-radius:99px;transition:all .2s;text-transform:uppercase}
+.cbtn:hover{color:var(--cy);border-color:var(--cy)}
+.cbtn.gold{color:var(--am);border-color:rgba(255,209,102,.5)}
+.cbtn.gold:hover{color:#000;background:var(--am)}
+/* inspector */
+#insp{position:fixed;inset:0;z-index:60;background:rgba(5,5,16,.88);backdrop-filter:blur(16px);display:none;overflow-y:auto;padding:74px 24px 40px}
+#insp.show{display:block}
+#insp .head{max-width:1180px;margin:0 auto 26px;display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+#insp h2{font-size:clamp(20px,3vw,30px);font-weight:700;letter-spacing:-.01em}
+#insp h2 i{font-style:normal;color:var(--cy)}
+#insp .head .x{border:1px solid var(--line2);background:transparent;color:var(--dim);border-radius:99px;padding:9px 18px;font-size:9.5px;letter-spacing:.2em}
+#insp .head .x:hover{color:var(--txt);border-color:var(--txt)}
+#igrid{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.icat{border:1px solid var(--line);border-radius:14px;background:rgba(10,12,28,.6);padding:18px}
+.icat h3{font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;margin-bottom:12px;text-transform:uppercase}
+.icat .n{padding:8px 0;border-bottom:1px dashed rgba(120,140,255,.1);font-size:11.5px;line-height:1.65;color:#c9d2f5;cursor:pointer;transition:color .15s}
+.icat .n:last-child{border:0}
+.icat .n:hover{color:var(--wt)}
+.icat .n b{font-family:var(--mono);font-size:9px;letter-spacing:.1em;display:block;margin-bottom:2px}
+.icat .n a{color:var(--cy);border-bottom:1px dotted var(--cy);pointer-events:auto}
+/* toast */
+#toast{position:fixed;top:74px;left:50%;transform:translate(-50%,-160%);z-index:70;background:rgba(8,10,24,.95);border:1px solid var(--am);border-radius:12px;padding:13px 22px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--gd);transition:transform .5s cubic-bezier(.2,.7,.2,1);text-align:center;max-width:88vw}
+#toast.show{transform:translate(-50%,0)}
+/* intro overlay */
+#intro{position:fixed;inset:0;z-index:80;background:var(--void);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;text-align:center;padding:24px;transition:opacity .9s,visibility .9s}
+#intro.done{opacity:0;visibility:hidden}
+#intro h1{font-size:clamp(26px,5vw,54px);font-weight:700;letter-spacing:-.02em;line-height:1.15}
+#intro h1 b{background:linear-gradient(120deg,var(--cy),var(--vi),var(--pk));-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro p{font-family:var(--mono);font-size:clamp(9px,1.4vw,11.5px);letter-spacing:.24em;color:var(--dim);text-transform:uppercase;line-height:2.2}
+#intro .go{margin-top:14px;border:1px solid var(--cy);background:transparent;color:var(--cy);border-radius:99px;padding:14px 34px;font-size:10.5px;letter-spacing:.26em}
+#intro .go:hover{background:var(--cy);color:#001}
+@media(max-width:860px){
+ #console{left:10px;right:10px;width:auto;top:auto;bottom:54px;height:46vh}
+ #ctrls{top:70px;right:10px;flex-direction:row}
+ #bar .r .hide-m{display:none}
+ #strip .hint{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<canvas id="mind"></canvas>
+<div id="tip"><div class="l" id="tipL"></div><div class="f" id="tipF"></div></div>
+
+<div id="intro">
+  <h1>This is not a portfolio.<br>It's <b>a mind you can interrogate.</b></h1>
+  <p>EVERY NEURON BELOW IS A REAL MEMORY FROM PRATHIK RAVICHANDRAN'S LIFE.<br>ASK A QUESTION · WATCH THE FORWARD PASS · CLICK ANY NEURON TO TRIGGER RECALL</p>
+  <button class="go" id="enter">STIMULATE THE NETWORK ▸</button>
+</div>
+
+<div id="bar">
+  <div class="brand"><b>PRATHIK://SYNAPSE</b><span class="sub">A NEURAL NETWORK TRAINED ON ONE HUMAN · CKPT 2026.06</span></div>
+  <div class="r"><span class="led"></span><span class="hide-m" id="stat">62 NEURONS · IDLE</span><a href="../">⌂ EXIT MIND</a></div>
+</div>
+
+<div id="console">
+  <div id="chead">decoder console — activations → language</div>
+  <div id="cout"></div>
+  <div id="chips"></div>
+  <div id="crow"><input id="cin" placeholder="Stimulate the network with a question…" autocomplete="off"><button id="csend">FIRE ▸</button></div>
+</div>
+
+<div id="ctrls">
+  <button class="cbtn gold" id="trainBtn">▶ run training (2018→2026)</button>
+  <button class="cbtn" id="inspBtn">⊞ weights inspector</button>
+  <button class="cbtn" id="dreamBtn">☾ force dream</button>
+</div>
+
+<div id="strip">
+  <span>HOUSTON, TX · WORK-AUTHORIZED THRU 2029 · SPONSORSHIP-READY</span>
+  <span class="hint">DRAG VOID TO PAN · HOVER NEURONS</span>
+  <div class="links"><a href="mailto:prathik.ravichandran.work@gmail.com">EMAIL</a><a href="https://www.linkedin.com/in/prathik-ravichandran/" target="_blank" rel="noopener">LINKEDIN</a><a href="https://github.com/PrathikRavichandran" target="_blank" rel="noopener">GITHUB</a><a href="tel:+14052306755">VOICE</a></div>
+</div>
+
+<div id="insp">
+  <div class="head"><h2>Weights Inspector — <i>every neuron, every memory</i></h2><button class="x" id="inspX">CLOSE ✕</button></div>
+  <div id="igrid"></div>
+</div>
+
+<div id="toast">…</div>
+
+<script>
+/* ═══════════════ THE MIND — DATA ═══════════════
+   Every neuron: real fact. Layers: eras of one life. */
+const LAYERS=[
+ {id:"IN", name:"STIMULUS", col:"#eef2ff", x:.06},
+ {id:"BLR", name:"BANGALORE 2018–21", col:"#ffd166", x:.20},
+ {id:"CGN", name:"COGNIZANT 2021–23", col:"#66ddff", x:.34},
+ {id:"USA", name:"THE LEAP 2024–25", col:"#a78bfa", x:.48},
+ {id:"HOU", name:"HOUSTON 2026", col:"#5dffa8", x:.62},
+ {id:"PRJ", name:"PROJECTS · ALL LIVE", col:"#ff6ea8", x:.76},
+ {id:"SLF", name:"CORE WEIGHTS", col:"#ffe9a0", x:.88},
+ {id:"OUT", name:"OUTPUT", col:"#ffffff", x:.97}];
+const N=[
+ /* INPUT */
+ {l:"IN",lab:"career?",fact:"Input token — career & work history.",tg:["career"]},
+ {l:"IN",lab:"projects?",fact:"Input token — things he built.",tg:["projects"]},
+ {l:"IN",lab:"skills?",fact:"Input token — the toolkit.",tg:["skills"]},
+ {l:"IN",lab:"life?",fact:"Input token — the human bits.",tg:["life"]},
+ {l:"IN",lab:"education?",fact:"Input token — formal training data.",tg:["edu"]},
+ {l:"IN",lab:"hire?",fact:"Input token — should you hire him (yes).",tg:["hire"]},
+ {l:"IN",lab:"why?",fact:"Input token — philosophy & values.",tg:["why"]},
+ /* BANGALORE */
+ {l:"BLR",lab:"ECE degree",fact:"B.E. Electronics & Communications, Sir M Visvesvaraya Institute of Technology, Bangalore (2018–21). Signals before software.",tg:["edu","career"]},
+ {l:"BLR",lab:"signals & systems",fact:"Hardware-first intuition: he learned what computers ARE before teaching them to think.",tg:["edu","skills","why"]},
+ {l:"BLR",lab:"🏀 national level",fact:"Played basketball at the national level in India. Court vision, timing, trust — pre-training for multi-agent orchestration.",tg:["life","why","hire"]},
+ {l:"BLR",lab:"team play",fact:"The court taught him: never force the pass, know your spacing, trust your teammates. Now he teaches that to agents.",tg:["life","why"]},
+ /* COGNIZANT */
+ {l:"CGN",lab:"ML pipelines",fact:"ML Engineer @ Cognizant (Sep 2021–Nov 2022): PySpark + TensorFlow + scikit-learn pipelines at 85% model accuracy, manual review down 40%.",tg:["career","skills"]},
+ {l:"CGN",lab:"10M+ records",fact:"Multi-stage transformations across 10M+ record datasets — throughput up 50%.",tg:["career","skills"]},
+ {l:"CGN",lab:"sub-100ms",fact:"Flask/FastAPI APIs serving 100,000+ daily requests at sub-100ms latency.",tg:["career","skills"]},
+ {l:"CGN",lab:"mentorship",fact:"Mentored junior engineers — team delivery velocity up 30%. Teaching is a load-bearing weight in this network.",tg:["career","hire","why"]},
+ {l:"CGN",lab:"enterprise RAG",fact:"GenAI Engineer @ Cognizant (Nov 2022–Dec 2023): enterprise RAG on AWS EMR → Pinecone & Weaviate, powering GPT-4 and Claude apps for financial services — before it was cool.",tg:["career","skills","rag"]},
+ {l:"CGN",lab:"AWS prod",fact:"Productionized LLM workloads on Lambda, API Gateway, Step Functions, ECS, S3 — blue-green CI/CD, IAM/secrets governance.",tg:["career","skills","cloud"]},
+ {l:"CGN",lab:"−45% latency",fact:"Cut preprocessing latency 45% via PySpark DataFrame & Spark SQL optimization.",tg:["career","skills"]},
+ /* USA */
+ {l:"USA",lab:"the leap",fact:"2024: one suitcase, one ocean. Bangalore → Oklahoma City. The highest-variance gradient step of his life.",tg:["edu","life","why","career"]},
+ {l:"USA",lab:"M.S. @ OCU",fact:"M.S. Data Analytics & AI, Oklahoma City University (2024–25) — graduate study at the exact moment agentic AI ignited.",tg:["edu","career"]},
+ {l:"USA",lab:"EasyStones",fact:"Agentic & GenAI Engineer @ EasyStones, Dallas (Feb–Dec 2025): a production multi-agent system built from scratch.",tg:["career"]},
+ {l:"USA",lab:"5-agent graph",fact:"Five LangGraph sub-agents — sales, inventory, pricing, marketing, cashflow — A2A over MCP under supervisor-governed policies.",tg:["career","skills","agents","hire"]},
+ {l:"USA",lab:"Model Armour",fact:"Hallucination control: retrieval fact-checking, confidence scoring, Model Armour guardrails, HITL escalation for high-stakes calls.",tg:["career","why","compliance"]},
+ {l:"USA",lab:"Iceberg + tri-cloud",fact:"PySpark ETL on GCP Dataproc → Apache Iceberg on Azure Blob → Azure AI Search, Pinecone, ChromaDB, OpenSearch. CI/CD across Azure, AWS, GCP.",tg:["career","skills","cloud"]},
+ {l:"USA",lab:"LangSmith traces",fact:"Full LLMOps: LangSmith agent tracing, custom hallucination metrics, Grafana/CloudWatch cost-latency dashboards, OpenTelemetry.",tg:["career","skills"]},
+ /* HOUSTON */
+ {l:"HOU",lab:"MMI",fact:"Agentic AI Systems Engineer @ Medical Metrics, Inc. (Apr 2026–now): regulated AI for FDA-regulated medical imaging in global clinical trials. Reports to the CTO AND the Chief Compliance Officer.",tg:["career","hire","compliance"]},
+ {l:"HOU",lab:"MCP servers",fact:"Production MCP integrations wiring MMI's on-prem LLM into clinical databases, document repos, and enterprise SaaS — natural language in, governed data out.",tg:["career","skills","mcp","agents"]},
+ {l:"HOU",lab:"hybrid RAG",fact:"Semantic chunking, confidence-gated outputs, citation-transparent answers. If it can't cite, it doesn't speak.",tg:["career","skills","rag","why"]},
+ {l:"HOU",lab:"65-person rollout",fact:"Leads the org-wide Claude Code rollout: department-scoped Skills as plugins, pairing directly with non-technical staff. 65 humans, one shared agentic toolkit.",tg:["career","hire","why"]},
+ {l:"HOU",lab:"Claude Code daily",fact:"Daily driver: Claude Code — custom Skills, sub-agents, hooks, plugins, MCP servers composed into reliable engineering workflows.",tg:["career","skills","claude"]},
+ {l:"HOU",lab:"HIPAA · 21 CFR",fact:"ISO 27001, HIPAA, 21 CFR Part 11: append-only audit logs, least-privilege tools, HITL confirmation gates. Designed in, not bolted on.",tg:["career","compliance","why","hire"]},
+ /* PROJECTS */
+ {l:"PRJ",lab:"Pathways 73/73",fact:"Live in production: AI navigator for Texans leaving incarceration — housing, work, legal rights, benefits. LangGraph state machine + Claude Code primitives. 73/73 tests passing.",tg:["projects","why","hire"],link:"https://pathways-iota.vercel.app"},
+ {l:"PRJ",lab:"Recrux.AI",fact:"Autonomous job-search platform: discovery → resume tailoring → cover letters → submission, HITL checkpoints, Playwright automation.",tg:["projects"],link:"https://recrux-ai.vercel.app"},
+ {l:"PRJ",lab:"CharityAI ×9",fact:"Nine isolated FastAPI agents over A2A — strict state machine, Postgres append-only audit log, Slack HITL gate, Gmail/Calendar.",tg:["projects","compliance"],link:"https://prathik10-charityai-demo.hf.space"},
+ {l:"PRJ",lab:"PlantOps",fact:"Plant-operator Q&A: hybrid ChromaDB + BM25 with RRF fusion and cited PDF previews. Citation-first, always.",tg:["projects","rag"],link:"https://plantops.streamlit.app"},
+ {l:"PRJ",lab:"PropAI",fact:"Property-manager dashboard — tenants, loans, escrow, maintenance — with Gemini insights grounded in live data. TypeScript + React 19.",tg:["projects"],link:"https://prathik10-propai.hf.space"},
+ /* SELF */
+ {l:"SLF",lab:"reliability>capability",fact:"Core weight #1: 'Reliability beats capability. A brilliant agent you can't trust is a liability with good marketing.'",tg:["why","hire","values"]},
+ {l:"SLF",lab:"guardrails=feature",fact:"Core weight #2: HITL gates, audit logs, confidence thresholds — they're not friction, they're what makes autonomy deployable.",tg:["why","compliance","values"]},
+ {l:"SLF",lab:"cite or silence",fact:"Core weight #3: citations or it didn't happen.",tg:["why","rag","values"]},
+ {l:"SLF",lab:"AI for everyone",fact:"Core weight #4: clinical staff, ops teams, people rebuilding after incarceration — tech only matters if people can use it.",tg:["why","values","hire"]},
+ {l:"SLF",lab:"🏊 swim",fact:"Laps as meditation. Best debugging happens underwater.",tg:["life"]},
+ {l:"SLF",lab:"🏄 surf.beta",fact:"Learning to surf — wiping out gracefully since 2026. Every wave is a retry with exponential backoff.",tg:["life"]},
+ {l:"SLF",lab:"✈️ travel",fact:"Bangalore → Oklahoma City → Dallas → Houston. The map keeps growing.",tg:["life"]},
+ {l:"SLF",lab:"🎮 xbox",fact:"Achievement hunter. Controller in hand when the agents sleep.",tg:["life"]},
+ /* OUTPUT */
+ {l:"OUT",lab:"ANSWER",fact:"Output neuron — where activations become language.",tg:[]}];
+/* answers per intent */
+const ANSW={
+ career:`Four deployments across two continents:\n\n<b>Medical Metrics, Houston</b> (2026–now) — regulated agentic AI for FDA-governed clinical imaging: MCP servers, hybrid RAG, a 65-person Claude Code rollout, answerable to the CTO and Chief Compliance Officer.\n<b>EasyStones, Dallas</b> (2025) — built a five-agent LangGraph company-brain from scratch: A2A over MCP, Model Armour guardrails, HITL escalation.\n<b>Cognizant, India</b> (2021–23) — ML pipelines at 10M+ records and sub-100ms APIs, then enterprise RAG on AWS before "RAG" was a word recruiters knew.`,
+ projects:`Five systems. All live right now:\n\n<b>Pathways</b> — reentry navigator for Texans, 73/73 tests · <a href="https://pathways-iota.vercel.app" target="_blank">live</a>\n<b>Recrux.AI</b> — autonomous job hunt with HITL · <a href="https://recrux-ai.vercel.app" target="_blank">live</a>\n<b>CharityAI</b> — nine agents, one inbox, append-only audit · <a href="https://prathik10-charityai-demo.hf.space" target="_blank">live</a>\n<b>PlantOps</b> — hybrid retrieval that cites PDF pages · <a href="https://plantops.streamlit.app" target="_blank">live</a>\n<b>PropAI</b> — grounded property intelligence · <a href="https://prathik10-propai.hf.space" target="_blank">live</a>`,
+ skills:`The high-activation weights:\n\n<b>Orchestration</b> — LangGraph · CrewAI · AutoGen · MCP · A2A · Claude Code (Skills, sub-agents, hooks, plugins)\n<b>Build</b> — Python (expert) · FastAPI · Pydantic · PySpark\n<b>Memory</b> — Pinecone · ChromaDB · Weaviate · OpenSearch · pgvector · Iceberg\n<b>Clouds</b> — Azure + AWS + GCP, all in production\n<b>Eyes</b> — LangSmith · OpenTelemetry · Grafana\n<b>Spine</b> — HIPAA · ISO 27001 · 21 CFR Part 11`,
+ life:`The pre-training data:\n\n🏀 <b>National-level basketball</b> in India — court vision became system vision\n🏊 Swimming — debugging happens underwater\n🏄 Surfing — status: beta, wipeouts: graceful\n✈️ Travel — BLR → OKC → DAL → HOU and counting\n🎮 Xbox — achievement hunter (this site has achievements too, by the way)`,
+ edu:`Formal training runs:\n\n<b>M.S. Data Analytics & AI</b> — Oklahoma City University, 2024–25. Crossed an ocean for it.\n<b>B.E. Electronics & Communications</b> — Sir M Visvesvaraya Institute of Technology, Bangalore, 2018–21. He learned what silicon IS before teaching it to reason.`,
+ hire:`Decoded verdict: <b>yes, and quickly</b>.\n\nEvidence: 4+ years of production agentic AI · systems running under HIPAA/FDA scrutiny · five live self-built products · a 65-person org he taught to use agents · mentorship history · national-level competitive discipline.\n\nLogistics: Houston TX · work-authorized through early 2029 (F-1 OPT) · seeking long-term sponsorship.\n\n📧 <a href="mailto:prathik.ravichandran.work@gmail.com">prathik.ravichandran.work@gmail.com</a> · 📱 (405) 230-6755`,
+ why:`The core weights, frozen since training:\n\n1. <b>Reliability beats capability.</b>\n2. <b>Guardrails are a feature</b> — they're what make autonomy deployable.\n3. <b>Citations or silence.</b>\n4. <b>AI for everyone</b> — from clinical staff to people rebuilding after incarceration.\n5. <b>Build under audit</b> — if it can't survive compliance review, it isn't production-grade.`};
+const CHIPQ=[["What's his career arc?","career"],["Show the projects","projects"],["Dump the skill weights","skills"],["Who is he off-duty?","life"],["Education?","edu"],["Verdict: hire him?","hire"],["What does he believe?","why"]];
+const KW={career:["career","work","job","mmi","medical","metrics","easystones","cognizant","experience","history","company"],projects:["project","pathway","recrux","charity","plant","prop","built","build","github","portfolio","demo"],skills:["skill","stack","tech","tool","python","langgraph","mcp","cloud","fastapi","claude","framework","vector","database"],life:["life","hobby","basketball","hoop","swim","surf","travel","xbox","game","fun","human","person"],edu:["education","school","degree","university","masters","college","study","bangalore","oklahoma"],hire:["hire","recruit","contact","email","phone","visa","sponsor","available","interview","salary","why should"],why:["why","philosophy","believe","value","principle","motto","guardrail","reliability","mission"]};
+/* ═══════════════ GEOMETRY ═══════════════ */
+const cv=document.getElementById('mind'),X=cv.getContext('2d');
+let W,H,DPR,panX=0,panY=0;
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const nodes=[],edges=[];
+function build(){
+ nodes.length=0;edges.length=0;
+ const byL={};
+ N.forEach((n,i)=>{(byL[n.l]=byL[n.l]||[]).push(n)});
+ LAYERS.forEach(L=>{const list=byL[L.id]||[];const m=list.length;
+  list.forEach((n,j)=>{const span=Math.min(.74,.13*m);const t=m===1?.5:j/(m-1);
+   const yy=.5+(t-.5)*span+ (Math.sin(j*7.3+L.x*40)*.018);
+   const xx=L.x+Math.sin(j*3.7)*.012;
+   nodes.push({...n,L,x:xx,y:yy,a:0,target:0,ph:Math.random()*7,r:n.l==="OUT"?15:(n.l==="IN"?7:9)});});});
+ /* edges: layer i -> i+1, prefer shared tags */
+ for(let li=0;li<LAYERS.length-1;li++){
+  const A=nodes.filter(n=>n.L===LAYERS[li]),B=nodes.filter(n=>n.L===LAYERS[li+1]);
+  A.forEach(a=>{const scored=B.map(b=>({b,s:b.tg.filter(t=>a.tg.includes(t)).length+Math.random()*.7}));
+   scored.sort((p,q)=>q.s-p.s);
+   const k=Math.min(B.length,a.l==="IN"?3:(2+(Math.random()<.5?1:0)));
+   for(let i=0;i<k;i++)edges.push({a,b:scored[i].b,w:.5+scored[i].s*.3});});}
+}
+function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px'}
+size();build();addEventListener('resize',()=>{size()});
+const px=n=>(n.x*innerWidth+panX)*DPR, py=n=>(n.y*(innerHeight-40)+panY+10)*DPR;
+/* glow sprite */
+const glow=document.createElement('canvas');glow.width=glow.height=64;
+{const g=glow.getContext('2d'),r=g.createRadialGradient(32,32,0,32,32,32);
+ r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.35,'rgba(255,255,255,.35)');r.addColorStop(1,'rgba(255,255,255,0)');
+ g.fillStyle=r;g.fillRect(0,0,64,64);}
+/* pulses */
+let pulses=[];
+function firePulse(e,delay,str){pulses.push({e,t:-delay,str})}
+/* ═══════════════ RENDER LOOP ═══════════════ */
+let frame=0,trainBoost=0;
+function draw(){frame++;
+ X.clearRect(0,0,W,H);
+ /* layer labels */
+ X.textAlign='center';
+ LAYERS.forEach(L=>{if(L.id==='OUT'||L.id==='IN'){}
+  X.fillStyle='rgba(140,150,200,.32)';X.font=`${9*DPR}px JetBrains Mono`;
+  X.fillText(L.name,(L.x*innerWidth+panX)*DPR,(innerHeight-26)*DPR);});
+ /* edges */
+ edges.forEach(e=>{const x1=px(e.a),y1=py(e.a),x2=px(e.b),y2=py(e.b);
+  const act=Math.max(e.a.a,0)*.5;
+  X.strokeStyle=`rgba(120,150,255,${.05+act*.25+trainBoost*.1})`;
+  X.lineWidth=(0.6+e.w*.5+trainBoost*1.2)*DPR;
+  X.beginPath();X.moveTo(x1,y1);
+  X.bezierCurveTo(x1+(x2-x1)*.45,y1,x2-(x2-x1)*.45,y2,x2,y2);X.stroke();});
+ /* pulses */
+ pulses=pulses.filter(p=>p.t<1.05);
+ pulses.forEach(p=>{p.t+=.022;if(p.t<0||p.t>1)return;
+  const e=p.e,x1=px(e.a),y1=py(e.a),x2=px(e.b),y2=py(e.b);
+  const t=p.t,mt=1-t;
+  const cx1=x1+(x2-x1)*.45,cx2=x2-(x2-x1)*.45;
+  const x=mt*mt*mt*x1+3*mt*mt*t*cx1+3*mt*t*t*cx2+t*t*t*x2;
+  const y=mt*mt*mt*y1+3*mt*mt*t*y1+3*mt*t*t*y2+t*t*t*y2;
+  const s=(10+p.str*16)*DPR;
+  X.globalCompositeOperation='lighter';
+  X.globalAlpha=.85;X.drawImage(glow,x-s/2,y-s/2,s,s);
+  X.globalAlpha=1;X.globalCompositeOperation='source-over';
+  if(p.t>=.98)e.b.a=Math.min(1,e.b.a+p.str*.5);});
+ /* neurons */
+ nodes.forEach(n=>{
+  n.a+=(n.target-n.a)*.05;
+  const breathe=.5+Math.sin(frame*.02+n.ph)*.5;
+  const base=.16+breathe*.07;
+  const a=Math.max(base,n.a);
+  const x=px(n),y=py(n);
+  const R=n.r*DPR*(1+n.a*.6);
+  const col=n.L.col;
+  /* halo */
+  const hs=R*(4+a*8);
+  X.globalAlpha=a*.5;X.globalCompositeOperation='lighter';
+  X.save();X.translate(x,y);X.scale(hs/64,hs/64);
+  X.fillStyle=col; // tint via composite below
+  X.drawImage(glow,-32,-32);X.restore();
+  X.globalCompositeOperation='source-over';X.globalAlpha=1;
+  /* core */
+  X.fillStyle=col;X.globalAlpha=.25+a*.75;
+  X.beginPath();X.arc(x,y,R,0,7);X.fill();X.globalAlpha=1;
+  X.strokeStyle=col;X.lineWidth=1.1*DPR;X.globalAlpha=.5+a*.5;
+  X.beginPath();X.arc(x,y,R+2.5*DPR,0,7);X.stroke();X.globalAlpha=1;
+  /* label */
+  if(a>.32||hov===n){X.fillStyle=`rgba(235,240,255,${Math.min(1,a+.25)})`;
+   X.font=`${8.6*DPR}px JetBrains Mono`;X.fillText(n.lab,x,y-R-7*DPR);}
+  n.target*=.992; /* slow decay */
+ });
+ requestAnimationFrame(draw);
+}
+if(!RM)requestAnimationFrame(draw);else{draw=()=>{};}
+/* ═══════════════ INTERACTION ═══════════════ */
+let hov=null,dragging=false,dsx=0,dsy=0,dpx=0,dpy=0,lastAct=Date.now();
+const tip=document.getElementById('tip');
+cv.addEventListener('pointermove',e=>{
+ if(dragging){panX=dpx+(e.clientX-dsx);panY=dpy+(e.clientY-dsy);return}
+ const mx=e.clientX,my=e.clientY;hov=null;
+ for(const n of nodes){const dx=mx-(px(n)/DPR),dy=my-(py(n)/DPR);
+  if(dx*dx+dy*dy<400){hov=n;break}}
+ if(hov){tip.style.opacity=1;
+  tip.style.left=Math.min(innerWidth-300,mx+16)+'px';tip.style.top=Math.min(innerHeight-120,my+16)+'px';
+  document.getElementById('tipL').textContent=hov.L.name;
+  document.getElementById('tipL').style.color=hov.L.col;
+  document.getElementById('tipF').textContent=hov.fact;
+  cv.style.cursor='pointer';
+ }else{tip.style.opacity=0;cv.style.cursor='grab'}});
+cv.addEventListener('pointerdown',e=>{if(hov)return;dragging=true;dsx=e.clientX;dsy=e.clientY;dpx=panX;dpy=panY;cv.style.cursor='grabbing'});
+addEventListener('pointerup',()=>{dragging=false});
+cv.addEventListener('click',()=>{if(hov&&hov.l!=="OUT")recall(hov)});
+/* ═══════════════ CONSOLE ═══════════════ */
+const cout=document.getElementById('cout');
+function say(q,a,rep){const d=document.createElement('div');d.className='block';
+ d.innerHTML=(q?`<div class="q">${q}</div>`:'')+`<div class="a">${a}</div>`+(rep?`<div class="rep">${rep}</div>`:'');
+ cout.appendChild(d);cout.scrollTop=cout.scrollHeight;return d}
+function report(list){return `ACTIVATION REPORT<br>`+list.map(([n,v])=>`<span class="rl"><span><span class="bar" style="width:${(v*46)|0}px;background:${n.L.col}"></span>${n.lab}</span><i>${v.toFixed(2)}</i></span>`).join('')}
+const chips=document.getElementById('chips');
+CHIPQ.forEach(([q,intent])=>{const c=document.createElement('button');c.className='chip';c.textContent=q;
+ c.onclick=()=>stimulate(q,intent);chips.appendChild(c)});
+const cin=document.getElementById('cin');
+document.getElementById('csend').onclick=()=>{free(cin.value);cin.value=''};
+cin.addEventListener('keydown',e=>{if(e.key==='Enter'){free(cin.value);cin.value=''}});
+function free(q){if(!q.trim())return;lastAct=Date.now();
+ const lq=q.toLowerCase();let best=null,score=0;
+ for(const k in KW){const s=KW[k].filter(w=>lq.includes(w)).length;if(s>score){score=s;best=k}}
+ if(!best){say(esc(q),`Low activation on every pathway <i style="color:var(--dim2)">(max_act &lt; 0.3)</i> — this network only knows one human really well.\nTry the chips, or click any glowing neuron out there.`);pulseInputs(.3);return}
+ stimulate(esc(q),best)}
+function esc(s){return s.replace(/</g,'&lt;')}
+/* ═══════════════ FORWARD PASS ═══════════════ */
+function pulseInputs(str){nodes.filter(n=>n.l==="IN").forEach(n=>n.target=Math.max(n.target,str))}
+function stimulate(q,intent){lastAct=Date.now();
+ document.getElementById('stat').textContent='62 NEURONS · FORWARD PASS…';
+ /* activate input + tagged */
+ const inN=nodes.find(n=>n.l==="IN"&&n.tg.includes(intent));
+ nodes.forEach(n=>{const hit=n.tg.includes(intent);n.target=Math.max(n.target, n===inN?1: hit?(.65+Math.random()*.35):0)});
+ const out=nodes.find(n=>n.l==="OUT");out.target=1;
+ /* staged pulses layer by layer */
+ LAYERS.forEach((L,li)=>{if(li===LAYERS.length-1)return;
+  edges.filter(e=>e.a.L===L).forEach(e=>{
+   const rel=(e.a.tg.includes(intent)||e.a.l==="IN")?1:0;
+   if(rel||Math.random()<.18)firePulse(e,li*.36+Math.random()*.2,(e.b.tg.includes(intent)?.9:.25));});});
+ /* answer after propagation */
+ const fired=nodes.filter(n=>n.tg.includes(intent)&&n.l!=="IN").map(n=>[n,.65+Math.random()*.35]).sort((a,b)=>b[1]-a[1]).slice(0,6);
+ const think=say(q,`<span style="color:var(--dim)">…propagating through ${LAYERS.length} layers…</span>`);
+ setTimeout(()=>{think.querySelector('.a').innerHTML=ANSW[intent];
+  think.insertAdjacentHTML('beforeend',`<div class="rep">${report(fired)}</div>`);
+  cout.scrollTop=cout.scrollHeight;
+  document.getElementById('stat').textContent='62 NEURONS · IDLE';},2400)}
+/* associative recall on neuron click */
+function recall(n){lastAct=Date.now();
+ n.target=1;
+ const related=nodes.filter(m=>m!==n&&m.tg.some(t=>n.tg.includes(t))).map(m=>[m,m.tg.filter(t=>n.tg.includes(t)).length+Math.random()*.4]).sort((a,b)=>b[1]-a[1]).slice(0,4);
+ related.forEach(([m],i)=>{m.target=Math.max(m.target,.75-i*.12);
+  const e=edges.find(e=>(e.a===n&&e.b===m)||(e.a===m&&e.b===n));
+  if(e)firePulse(e,i*.18,.7);else{const path=edges.filter(x=>x.a===n);if(path[i%path.length])firePulse(path[i%path.length],i*.18,.5)}});
+ const chain=related.map(([m])=>`<b style="color:${m.L.col}">${m.lab}</b>`).join(' → ');
+ say(`direct stimulation: ${n.lab}`,`<b style="color:${n.L.col}">${n.lab}</b> — ${n.fact}${n.link?`\n\n→ <a href="${n.link}" target="_blank">open live system ↗</a>`:''}\n\n<span style="color:var(--dim)">associative spread:</span> ${chain||'(terminal memory)'}`,
+  report(related.length?related:[[n,1]]))}
+/* ═══════════════ DREAMS ═══════════════ */
+function dream(){const cand=nodes.filter(n=>n.l!=="IN"&&n.l!=="OUT");
+ const n=cand[(Math.random()*cand.length)|0];n.target=Math.max(n.target,.6);
+ edges.filter(e=>e.a===n).slice(0,2).forEach((e,i)=>firePulse(e,i*.2,.4));
+ say('', `<span class="dream">…dreaming: ${n.fact}</span>`)}
+setInterval(()=>{if(Date.now()-lastAct>14000&&!document.getElementById('insp').classList.contains('show')){dream();lastAct=Date.now()-8000}},6000);
+document.getElementById('dreamBtn').onclick=()=>{lastAct=Date.now();dream()};
+/* ═══════════════ TRAINING RUN ═══════════════ */
+const MILES=[[2018.7,"first epoch — ECE @ Sir MVIT, Bangalore. loss: 4.83 (everything is confusing)"],[2019.9,"🏀 side-quest converges: national-level basketball. court_vision.weights frozen"],[2021.7,"first production gradient @ Cognizant — 10M+ records flow"],[2022.9,"domain shift: ML → GenAI. enterprise RAG before it was cool"],[2024.6,"⚠ MASSIVE DISTRIBUTION SHIFT: continent change detected (BLR → OKC)"],[2025.2,"M.S. Data Analytics & AI — regularization complete"],[2025.6,"five-agent ensemble stabilizes @ EasyStones, Dallas"],[2026.3,"deployed under audit @ Medical Metrics, Houston. HIPAA constraints satisfied"],[2026.5,"converged: reliability > capability. loss: 0.07 (still descending)"]];
+let training=false;
+document.getElementById('trainBtn').onclick=()=>{if(training)return;training=true;lastAct=Date.now();
+ const d=say('replay training run 2018 → 2026',`<span style="color:var(--am)">EPOCH <span id="ep">2018.0</span> · LOSS <span id="loss">4.83</span></span>\n<canvas id="lossCv" width="640" height="160" style="width:100%;border:1px solid var(--line);border-radius:8px;margin-top:8px"></canvas>\n<div id="mlog" style="font-family:var(--mono);font-size:9px;line-height:2;color:var(--dim);margin-top:8px"></div>`);
+ const lc=d.querySelector('#lossCv'),lx=lc.getContext('2d');
+ const ep=d.querySelector('#ep'),lo=d.querySelector('#loss'),mlog=d.querySelector('#mlog');
+ let t=0;const T=9000,t0=performance.now();let mi=0;
+ lx.strokeStyle='#66ddff';lx.lineWidth=2;lx.beginPath();
+ (function step(now){t=Math.min(1,(now-t0)/T);
+  const year=2018+t*8.5;const loss=4.83*Math.exp(-3.4*t)+.07+Math.sin(t*40)*.05*(1-t);
+  ep.textContent=year.toFixed(1);lo.textContent=Math.max(.07,loss).toFixed(2);
+  trainBoost=t*.8;
+  const cx2=t*640,cy2=160-((4.9-loss)/4.9)*150-5;
+  lx.lineTo(cx2,cy2);lx.stroke();lx.beginPath();lx.moveTo(cx2,cy2);
+  while(mi<MILES.length&&year>=MILES[mi][0]){
+   mlog.insertAdjacentHTML('beforeend',`<div>▸ epoch ${MILES[mi][0]} — ${MILES[mi][1]}</div>`);
+   const cand=nodes.filter(n=>n.l!=="IN");const n=cand[(Math.random()*cand.length)|0];n.target=1;
+   edges.filter(e=>e.a===n).forEach((e,i)=>firePulse(e,i*.1,.8));
+   cout.scrollTop=cout.scrollHeight;mi++;}
+  if(t<1)requestAnimationFrame(step);
+  else{training=false;trainBoost=.35;toast('MODEL CONVERGED — reliability beats capability. guardrails are a feature.');
+   nodes.forEach(n=>n.target=Math.max(n.target,.5));setTimeout(()=>trainBoost=0,6000)}})(t0);}
+function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),4600)}
+/* ═══════════════ INSPECTOR ═══════════════ */
+const insp=document.getElementById('insp'),igrid=document.getElementById('igrid');
+LAYERS.filter(L=>L.id!=="OUT").forEach(L=>{
+ const cat=document.createElement('div');cat.className='icat';
+ cat.innerHTML=`<h3 style="color:${L.col}">${L.name}</h3>`;
+ nodes.filter(n=>n.L===L).forEach(n=>{const d=document.createElement('div');d.className='n';
+  d.innerHTML=`<b style="color:${L.col}">${n.lab}</b>${n.fact}${n.link?` <a href="${n.link}" target="_blank" rel="noopener">live ↗</a>`:''}`;
+  d.onclick=e=>{if(e.target.tagName==='A')return;insp.classList.remove('show');recall(n)};
+  cat.appendChild(d)});
+ igrid.appendChild(cat)});
+document.getElementById('inspBtn').onclick=()=>insp.classList.add('show');
+document.getElementById('inspX').onclick=()=>insp.classList.remove('show');
+/* ═══════════════ ENTRY ═══════════════ */
+document.getElementById('enter').onclick=()=>{
+ document.getElementById('intro').classList.add('done');
+ say('',`Network online. <b>62 neurons, one human, zero hallucinations</b> — every memory below is real and sourced from his resume.\n\nAsk something, tap a chip, or click any neuron in the void to trigger <b>associative recall</b>. Leave me alone long enough and I'll start dreaming.`);
+ pulseInputs(.8);
+ setTimeout(()=>stimulate('warm-up: who is this mind?','why'),900)};
+/* konami → everything fires */
+const KC=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];let kp=[];
+addEventListener('keydown',e=>{kp.push(e.key);kp=kp.slice(-10);
+ if(KC.every((k,i)=>kp[i]===k)){kp=[];nodes.forEach(n=>n.target=1);
+  edges.forEach((e,i)=>{if(i%2===0)firePulse(e,Math.random()*.8,.9)});
+  toast('⚡ GRAND MAL ACTIVATION — every memory at once. he contains multitudes.')}});
+</script>
+</body>
+</html>
