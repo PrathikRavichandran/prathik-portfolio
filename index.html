@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prathik Ravichandran — Choose Your Experience</title>
+<meta name="description" content="Prathik Ravichandran, Agentic AI Systems Engineer. One engineer, four portfolio experiences: The Living Machine, Cosmos, Editorial, and Agent-OS.">
+<meta property="og:title" content="Prathik Ravichandran — One Engineer, Four Worlds">
+<meta property="og:description" content="Pick your portal: a living machine, a universe, a magazine, or an OS you can interrogate.">
+<meta property="og:image" content="https://github.com/PrathikRavichandran.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23070710'/><text x='50' y='66' font-size='46' text-anchor='middle' fill='%23ffffff' font-family='Georgia' font-style='italic'>P</text><circle cx='74' cy='30' r='6' fill='%2300ff88'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,900;1,9..144,300&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070710;--txt:#f0eef8;--dim:#8a87a8;--mono:'JetBrains Mono',monospace;--disp:'Space Grotesk',sans-serif;--serif:'Fraunces',serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);font-family:var(--disp);overflow:hidden}
+a{color:inherit;text-decoration:none}
+/* header */
+header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:20px 30px;mix-blend-mode:difference}
+header .nm{font-family:var(--mono);font-size:11px;letter-spacing:.3em}
+header .lk{display:flex;gap:20px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#cfcde0}
+header .lk a:hover{color:#fff;text-decoration:underline}
+/* intro overlay text */
+#intro{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;padding:20px;transition:opacity .5s}
+#intro h1{font-family:var(--serif);font-weight:900;font-size:clamp(34px,6.8vw,92px);line-height:1;letter-spacing:-.02em;text-shadow:0 4px 50px rgba(0,0,0,.9)}
+#intro h1 em{font-style:italic;font-weight:300}
+#intro p{margin-top:18px;font-family:var(--mono);font-size:clamp(9px,1.4vw,12px);letter-spacing:.32em;color:#d8d6ea;text-transform:uppercase;text-shadow:0 2px 20px rgba(0,0,0,.9)}
+#intro .hintline{margin-top:34px;font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:#9a97b8;animation:pulse 2.6s infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+body.engaged #intro{opacity:0}
+/* panels */
+#panels{display:flex;height:100%;width:100%}
+.panel{position:relative;flex:1;height:100%;overflow:hidden;cursor:pointer;transition:flex .65s cubic-bezier(.2,.7,.2,1);border-right:1px solid rgba(255,255,255,.07)}
+.panel:last-child{border-right:0}
+.panel:hover{flex:2.6}
+.panel .bg{position:absolute;inset:0;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.panel:hover .bg{transform:scale(1.06)}
+.panel .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,7,16,.25) 0%,rgba(7,7,16,0) 40%,rgba(7,7,16,.82) 100%)}
+.panel .label{position:absolute;left:0;right:0;bottom:0;padding:28px 24px;z-index:5}
+.panel .no{font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:#cfcde0;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.panel .no::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.25)}
+.panel h2{font-size:clamp(17px,2vw,26px);font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.panel .ds{margin-top:9px;font-size:11.5px;color:#c3c1d6;line-height:1.7;max-width:300px;opacity:0;transform:translateY(12px);transition:opacity .45s .15s,transform .45s .15s}
+.panel:hover .ds{opacity:1;transform:none}
+.panel .enter{margin-top:14px;font-family:var(--mono);font-size:9px;letter-spacing:.26em;opacity:0;transition:opacity .45s .25s}
+.panel:hover .enter{opacity:1}
+/* P1 machine */
+.p1 .bg{background:radial-gradient(ellipse at 50% 0%,#0a1a2e 0%,#04070d 70%)}
+.p1 canvas{position:absolute;inset:0;width:100%;height:100%}
+.p1 .enter,.p1 .no b{color:#00d4ff}
+/* P2 cosmos */
+.p2 .bg{background:radial-gradient(ellipse at 30% 20%,#1a1238 0%,#020209 70%)}
+.p2 canvas{position:absolute;inset:0;width:100%;height:100%}
+.p2 .enter{color:#ffd9a0}
+/* P3 editorial */
+.p3 .bg{background:#f6f1e7}
+.p3 .shade{background:linear-gradient(180deg,rgba(7,7,16,0) 55%,rgba(7,7,16,.78) 100%)}
+.p3 .mag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#161412;text-align:center;padding:18px}
+.p3 .mag .m1{font-family:var(--serif);font-weight:900;font-size:clamp(22px,3.4vw,46px);letter-spacing:-.01em;line-height:.95}
+.p3 .mag .m2{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(12px,1.4vw,18px);margin-top:10px;color:#e0492c}
+.p3 .mag .rule{width:46%;height:2px;background:#161412;margin:16px 0}
+.p3 .mag .m3{font-family:var(--mono);font-size:8px;letter-spacing:.3em;color:#4a443c}
+.p3 .enter{color:#ffb46b}
+/* P4 fable */
+.p4 .bg{background:radial-gradient(ellipse at 70% 30%,#43195e 0%,#0d0716 65%)}
+.p4 .orbs{position:absolute;inset:0}
+.p4 .orb{position:absolute;border-radius:50%;filter:blur(30px);opacity:.55;animation:float 7s ease-in-out infinite alternate}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-26px)}}
+.p4 .chat{position:absolute;top:18%;left:50%;transform:translateX(-50%);width:74%;max-width:240px;display:grid;gap:8px}
+.p4 .bub{border-radius:11px;padding:9px 12px;font-size:9.5px;line-height:1.55;font-family:var(--mono);letter-spacing:.02em;backdrop-filter:blur(6px)}
+.p4 .bub.q{background:rgba(255,94,135,.8);justify-self:end;border-bottom-right-radius:3px;color:#fff}
+.p4 .bub.a{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-bottom-left-radius:3px;color:#e8def5}
+.p4 .enter{color:#4fe3c1}
+@media(max-width:860px){
+ #panels{flex-direction:column}
+ .panel{border-right:0;border-bottom:1px solid rgba(255,255,255,.07)}
+ .panel:hover{flex:2.2}
+ .panel .ds{display:none}
+ .panel .label{padding:18px 20px}
+ #intro h1{font-size:clamp(30px,9vw,52px)}
+ body{overflow-y:auto}
+}
+footer{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;padding:14px 30px;font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;color:#8a87a8;mix-blend-mode:difference;pointer-events:none}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
+</style>
+</head>
+<body>
+<header>
+  <span class="nm">PRATHIK RAVICHANDRAN</span>
+  <span class="lk"><a href="https://github.com/PrathikRavichandran" target="_blank" rel="noopener">GITHUB</a><a href="https://www.linkedin.com/in/prathik-ravichandran/" target="_blank" rel="noopener">LINKEDIN</a><a href="mailto:prathik.ravichandran.work@gmail.com">EMAIL</a></span>
+</header>
+
+<div id="intro">
+  <h1>One engineer.<br><em>Four worlds.</em></h1>
+  <p>Agentic AI Systems Engineer · Houston, TX</p>
+  <div class="hintline">HOVER A PORTAL · CLICK TO ENTER</div>
+</div>
+
+<div id="panels">
+  <a class="panel p1" href="machine/">
+    <div class="bg"><canvas id="c1"></canvas></div><div class="shade"></div>
+    <div class="label"><div class="no"><b>01</b> SYSTEM</div><h2>The Living Machine</h2>
+      <div class="ds">A mission-control OS with a boot sequence, an interactive agent graph, and a terminal that takes orders. For those who want to see the engine room.</div>
+      <div class="enter">ENTER THE MACHINE ▸</div></div>
+  </a>
+  <a class="panel p2" href="cosmos/">
+    <div class="bg"><canvas id="c2"></canvas></div><div class="shade"></div>
+    <div class="label"><div class="no"><b>02</b> VOYAGE</div><h2>Cosmos</h2>
+      <div class="ds">A 3D voyage from Bangalore to Houston — careers as star systems, projects as planets, skills as constellations. Scroll like you mean it.</div>
+      <div class="enter">BEGIN THE VOYAGE ▸</div></div>
+  </a>
+  <a class="panel p3" href="editorial/">
+    <div class="bg"></div>
+    <div class="mag"><div class="m1">AUTONOMY<span style="font-weight:300">.</span></div><div class="m2">The Ravichandran Issue</div><div class="rule"></div><div class="m3">VOL 04 · HOUSTON · JUNE 2026</div></div>
+    <div class="shade"></div>
+    <div class="label"><div class="no"><b>03</b> PRESS</div><h2 style="color:#fff">Editorial</h2>
+      <div class="ds">A luxury magazine profile — cover story, portfolio plates, fine-print specifications. For those who read the long-form.</div>
+      <div class="enter">OPEN THE ISSUE ▸</div></div>
+  </a>
+  <a class="panel p4" href="fable/">
+    <div class="bg"></div>
+    <div class="orbs"><div class="orb" style="width:130px;height:130px;background:#ff5e87;top:12%;left:8%"></div><div class="orb" style="width:100px;height:100px;background:#4fe3c1;bottom:24%;right:6%;animation-delay:-3s"></div></div>
+    <div class="chat"><div class="bub q">Why should we hire him?</div><div class="bub a">Routing → contact-agent… here's the case, with citations ▸</div></div>
+    <div class="shade"></div>
+    <div class="label"><div class="no"><b>04</b> DIALOGUE</div><h2>Agent-OS</h2>
+      <div class="ds">Don't read the portfolio — interrogate it. A desktop OS run by simulated sub-agents, with a live trace panel, HITL gates, and a basketball game.</div>
+      <div class="enter">BOOT THE OS ▸</div></div>
+  </a>
+</div>
+
+<footer><span>4 EXPERIENCES · 1 RESUME · 0 HALLUCINATIONS</span><span>© 2026 · BUILT WITH CLAUDE</span></footer>
+
+<script>
+document.querySelectorAll('.panel').forEach(p=>{p.addEventListener('mouseenter',()=>document.body.classList.add('engaged'));p.addEventListener('mouseleave',()=>document.body.classList.remove('engaged'))});
+/* p1 mini network */
+(function(){const c=document.getElementById('c1'),x=c.getContext('2d');let W,H,N=[];
+ function rs(){W=c.width=c.clientWidth;H=c.height=c.clientHeight;N=[];for(let i=0;i<26;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4})}
+ rs();addEventListener('resize',rs);
+ (function d(){x.clearRect(0,0,W,H);
+  for(let i=0;i<N.length;i++){const a=N[i];a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
+   for(let j=i+1;j<N.length;j++){const b=N[j],dd=Math.hypot(a.x-b.x,a.y-b.y);if(dd<110){x.strokeStyle=`rgba(0,212,255,${(1-dd/110)*.3})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
+   x.fillStyle='rgba(0,212,255,.8)';x.beginPath();x.arc(a.x,a.y,1.6,0,7);x.fill()}
+  requestAnimationFrame(d)})()})();
+/* p2 mini stars */
+(function(){const c=document.getElementById('c2'),x=c.getContext('2d');let W,H,S=[];
+ function rs(){W=c.width=c.clientWidth;H=c.height=c.clientHeight;S=[];for(let i=0;i<90;i++)S.push({x:Math.random()*W,y:Math.random()*H,z:.2+Math.random()*.9})}
+ rs();addEventListener('resize',rs);
+ (function d(){x.clearRect(0,0,W,H);
+  S.forEach(s=>{s.y+=s.z*.3;if(s.y>H)s.y=0;
+   x.fillStyle=`rgba(${s.z>.8?'255,217,160':'200,210,255'},${s.z*.9})`;x.beginPath();x.arc(s.x,s.y,s.z*1.4,0,7);x.fill()});
+  requestAnimationFrame(d)})()})();
+</script>
+</body>
+</html>
