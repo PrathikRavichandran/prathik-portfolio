@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prathik Ravichandran — Choose Your Experience</title>
-<meta name="description" content="Prathik Ravichandran, Agentic AI Systems Engineer. One engineer, four portfolio experiences: The Living Machine, Cosmos, Editorial, and Agent-OS.">
-<meta property="og:title" content="Prathik Ravichandran — One Engineer, Four Worlds">
-<meta property="og:description" content="Pick your portal: a living machine, a universe, a magazine, or an OS you can interrogate.">
+<meta name="description" content="Prathik Ravichandran, Agentic AI Systems Engineer. One engineer, six portfolio experiences: Living Machine, Cosmos, Editorial, Agent-OS, Synapse, and Powers of Prathik.">
+<meta property="og:title" content="Prathik Ravichandran — One Engineer, Six Worlds">
+<meta property="og:description" content="Pick your portal: a living machine, a universe, a magazine, an OS, a neural mind, or a fall through ten orders of magnitude.">
 <meta property="og:image" content="https://github.com/PrathikRavichandran.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23070710'/><text x='50' y='66' font-size='46' text-anchor='middle' fill='%23ffffff' font-family='Georgia' font-style='italic'>P</text><circle cx='74' cy='30' r='6' fill='%2300ff88'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,10 @@
 html,body{height:100%}
 body{background:var(--bg);color:var(--txt);font-family:var(--disp);overflow:hidden}
 a{color:inherit;text-decoration:none}
-/* header */
 header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:20px 30px;mix-blend-mode:difference}
 header .nm{font-family:var(--mono);font-size:11px;letter-spacing:.3em}
 header .lk{display:flex;gap:20px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:#cfcde0}
 header .lk a:hover{color:#fff;text-decoration:underline}
-/* intro overlay text */
 #intro{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-align:center;padding:20px;transition:opacity .5s}
 #intro h1{font-family:var(--serif);font-weight:900;font-size:clamp(34px,6.8vw,92px);line-height:1;letter-spacing:-.02em;text-shadow:0 4px 50px rgba(0,0,0,.9)}
 #intro h1 em{font-style:italic;font-weight:300}
@@ -31,57 +29,64 @@ header .lk a:hover{color:#fff;text-decoration:underline}
 #intro .hintline{margin-top:34px;font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:#9a97b8;animation:pulse 2.6s infinite}
 @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
 body.engaged #intro{opacity:0}
-/* panels */
 #panels{display:flex;height:100%;width:100%}
 .panel{position:relative;flex:1;height:100%;overflow:hidden;cursor:pointer;transition:flex .65s cubic-bezier(.2,.7,.2,1);border-right:1px solid rgba(255,255,255,.07)}
 .panel:last-child{border-right:0}
-.panel:hover{flex:2.6}
+.panel:hover{flex:3}
 .panel .bg{position:absolute;inset:0;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .panel:hover .bg{transform:scale(1.06)}
-.panel .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,7,16,.25) 0%,rgba(7,7,16,0) 40%,rgba(7,7,16,.82) 100%)}
-.panel .label{position:absolute;left:0;right:0;bottom:0;padding:28px 24px;z-index:5}
-.panel .no{font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:#cfcde0;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.panel .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,7,16,.25) 0%,rgba(7,7,16,0) 40%,rgba(7,7,16,.85) 100%)}
+.panel .label{position:absolute;left:0;right:0;bottom:0;padding:26px 20px;z-index:5}
+.panel .no{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:#cfcde0;margin-bottom:9px;display:flex;align-items:center;gap:10px}
 .panel .no::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.25)}
-.panel h2{font-size:clamp(17px,2vw,26px);font-weight:700;letter-spacing:-.01em;line-height:1.15}
-.panel .ds{margin-top:9px;font-size:11.5px;color:#c3c1d6;line-height:1.7;max-width:300px;opacity:0;transform:translateY(12px);transition:opacity .45s .15s,transform .45s .15s}
+.panel h2{font-size:clamp(15px,1.7vw,23px);font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.panel .ds{margin-top:9px;font-size:11px;color:#c3c1d6;line-height:1.65;max-width:300px;opacity:0;transform:translateY(12px);transition:opacity .45s .15s,transform .45s .15s}
 .panel:hover .ds{opacity:1;transform:none}
-.panel .enter{margin-top:14px;font-family:var(--mono);font-size:9px;letter-spacing:.26em;opacity:0;transition:opacity .45s .25s}
+.panel .enter{margin-top:13px;font-family:var(--mono);font-size:8.5px;letter-spacing:.26em;opacity:0;transition:opacity .45s .25s;color:#9be8ff}
 .panel:hover .enter{opacity:1}
 /* P1 machine */
 .p1 .bg{background:radial-gradient(ellipse at 50% 0%,#0a1a2e 0%,#04070d 70%)}
 .p1 canvas{position:absolute;inset:0;width:100%;height:100%}
-.p1 .enter,.p1 .no b{color:#00d4ff}
+.p1 .enter{color:#00d4ff}
 /* P2 cosmos */
 .p2 .bg{background:radial-gradient(ellipse at 30% 20%,#1a1238 0%,#020209 70%)}
 .p2 canvas{position:absolute;inset:0;width:100%;height:100%}
 .p2 .enter{color:#ffd9a0}
 /* P3 editorial */
 .p3 .bg{background:#f6f1e7}
-.p3 .shade{background:linear-gradient(180deg,rgba(7,7,16,0) 55%,rgba(7,7,16,.78) 100%)}
-.p3 .mag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#161412;text-align:center;padding:18px}
-.p3 .mag .m1{font-family:var(--serif);font-weight:900;font-size:clamp(22px,3.4vw,46px);letter-spacing:-.01em;line-height:.95}
-.p3 .mag .m2{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(12px,1.4vw,18px);margin-top:10px;color:#e0492c}
-.p3 .mag .rule{width:46%;height:2px;background:#161412;margin:16px 0}
-.p3 .mag .m3{font-family:var(--mono);font-size:8px;letter-spacing:.3em;color:#4a443c}
+.p3 .shade{background:linear-gradient(180deg,rgba(7,7,16,0) 55%,rgba(7,7,16,.8) 100%)}
+.p3 .mag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#161412;text-align:center;padding:14px}
+.p3 .mag .m1{font-family:var(--serif);font-weight:900;font-size:clamp(17px,2.6vw,36px);letter-spacing:-.01em;line-height:.95}
+.p3 .mag .m2{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(10px,1.2vw,15px);margin-top:9px;color:#e0492c}
+.p3 .mag .rule{width:46%;height:2px;background:#161412;margin:13px 0}
+.p3 .mag .m3{font-family:var(--mono);font-size:7px;letter-spacing:.26em;color:#4a443c}
 .p3 .enter{color:#ffb46b}
 /* P4 fable */
 .p4 .bg{background:radial-gradient(ellipse at 70% 30%,#43195e 0%,#0d0716 65%)}
 .p4 .orbs{position:absolute;inset:0}
 .p4 .orb{position:absolute;border-radius:50%;filter:blur(30px);opacity:.55;animation:float 7s ease-in-out infinite alternate}
 @keyframes float{from{transform:translateY(0)}to{transform:translateY(-26px)}}
-.p4 .chat{position:absolute;top:18%;left:50%;transform:translateX(-50%);width:74%;max-width:240px;display:grid;gap:8px}
-.p4 .bub{border-radius:11px;padding:9px 12px;font-size:9.5px;line-height:1.55;font-family:var(--mono);letter-spacing:.02em;backdrop-filter:blur(6px)}
+.p4 .chat{position:absolute;top:16%;left:50%;transform:translateX(-50%);width:80%;max-width:220px;display:grid;gap:8px}
+.p4 .bub{border-radius:11px;padding:8px 11px;font-size:8.5px;line-height:1.55;font-family:var(--mono);letter-spacing:.02em;backdrop-filter:blur(6px)}
 .p4 .bub.q{background:rgba(255,94,135,.8);justify-self:end;border-bottom-right-radius:3px;color:#fff}
 .p4 .bub.a{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-bottom-left-radius:3px;color:#e8def5}
 .p4 .enter{color:#4fe3c1}
-@media(max-width:860px){
- #panels{flex-direction:column}
- .panel{border-right:0;border-bottom:1px solid rgba(255,255,255,.07)}
- .panel:hover{flex:2.2}
- .panel .ds{display:none}
- .panel .label{padding:18px 20px}
- #intro h1{font-size:clamp(30px,9vw,52px)}
+/* P5 synapse */
+.p5 .bg{background:radial-gradient(ellipse at 50% 30%,#101635 0%,#050510 70%)}
+.p5 .enter{color:#66ddff}
+/* P6 powers */
+.p6 .bg{background:radial-gradient(circle at 50% 45%,#16224a 0%,#030308 70%)}
+.p6 .enter{color:#ffb46b}
+.zr{position:absolute;top:45%;left:50%;border:1.5px solid rgba(125,216,255,.5);border-radius:50%;animation:zoomr 4s linear infinite}
+@keyframes zoomr{from{transform:translate(-50%,-50%) scale(.25);opacity:0}30%{opacity:.9}to{transform:translate(-50%,-50%) scale(1.7);opacity:0}}
+@media(max-width:980px){
  body{overflow-y:auto}
+ #panels{flex-direction:column;height:auto;min-height:100%}
+ .panel{border-right:0;border-bottom:1px solid rgba(255,255,255,.07);min-height:32vh;flex:none}
+ .panel .ds{display:none}
+ .panel .label{padding:16px 18px}
+ #intro h1{font-size:clamp(28px,8.5vw,48px)}
+ #intro{position:absolute}
 }
 footer{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;padding:14px 30px;font-family:var(--mono);font-size:8.5px;letter-spacing:.24em;color:#8a87a8;mix-blend-mode:difference;pointer-events:none}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important}}
@@ -94,7 +99,7 @@ footer{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-co
 </header>
 
 <div id="intro">
-  <h1>One engineer.<br><em>Four worlds.</em></h1>
+  <h1>One engineer.<br><em>Six worlds.</em></h1>
   <p>Agentic AI Systems Engineer · Houston, TX</p>
   <div class="hintline">HOVER A PORTAL · CLICK TO ENTER</div>
 </div>
@@ -129,15 +134,41 @@ footer{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-co
       <div class="ds">Don't read the portfolio — interrogate it. A desktop OS run by simulated sub-agents, with a live trace panel, HITL gates, and a basketball game.</div>
       <div class="enter">BOOT THE OS ▸</div></div>
   </a>
+  <a class="panel p5" href="synapse/">
+    <div class="bg">
+      <svg viewBox="0 0 200 400" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+        <g stroke="rgba(102,221,255,.35)" stroke-width="1"><path d="M40,80 L100,150 M100,150 L160,90 M100,150 L60,230 M100,150 L150,240 M60,230 L100,310 M150,240 L100,310" fill="none"/></g>
+        <g><circle cx="40" cy="80" r="5" fill="#ffd166"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.2s" repeatCount="indefinite"/></circle>
+        <circle cx="160" cy="90" r="5" fill="#66ddff"><animate attributeName="opacity" values="1;0.3;1" dur="2.8s" repeatCount="indefinite"/></circle>
+        <circle cx="100" cy="150" r="7" fill="#a78bfa"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/></circle>
+        <circle cx="60" cy="230" r="5" fill="#5dffa8"><animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="150" cy="240" r="5" fill="#ff6ea8"><animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="100" cy="310" r="6" fill="#ffe9a0"><animate attributeName="opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/></circle></g>
+      </svg>
+    </div><div class="shade"></div>
+    <div class="label"><div class="no"><b>05</b> MIND</div><h2>Synapse</h2>
+      <div class="ds">A neural network trained on one human. Every neuron is a real memory — ask a question and watch the forward pass. Leave it alone and it dreams.</div>
+      <div class="enter">STIMULATE THE NETWORK ▸</div></div>
+  </a>
+  <a class="panel p6" href="powers/">
+    <div class="bg">
+      <div class="zr" style="width:240px;height:240px"></div>
+      <div class="zr" style="width:240px;height:240px;animation-delay:-1.3s"></div>
+      <div class="zr" style="width:240px;height:240px;animation-delay:-2.6s"></div>
+    </div><div class="shade"></div>
+    <div class="label"><div class="no"><b>06</b> SCALE</div><h2>Powers of Prathik</h2>
+      <div class="ds">Scroll to fall ten orders of magnitude — from Earth orbit through Texas, a building, a life, a screen, a circuit, down to DNA that spells RELIABILITY.</div>
+      <div class="enter">BEGIN DESCENT ▸</div></div>
+  </a>
 </div>
 
-<footer><span>4 EXPERIENCES · 1 RESUME · 0 HALLUCINATIONS</span><span>© 2026 · BUILT WITH CLAUDE</span></footer>
+<footer><span>6 EXPERIENCES · 1 RESUME · 0 HALLUCINATIONS</span><span>© 2026 · BUILT WITH CLAUDE</span></footer>
 
 <script>
 document.querySelectorAll('.panel').forEach(p=>{p.addEventListener('mouseenter',()=>document.body.classList.add('engaged'));p.addEventListener('mouseleave',()=>document.body.classList.remove('engaged'))});
 /* p1 mini network */
 (function(){const c=document.getElementById('c1'),x=c.getContext('2d');let W,H,N=[];
- function rs(){W=c.width=c.clientWidth;H=c.height=c.clientHeight;N=[];for(let i=0;i<26;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4})}
+ function rs(){W=c.width=c.clientWidth||300;H=c.height=c.clientHeight||600;N=[];for(let i=0;i<26;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4})}
  rs();addEventListener('resize',rs);
  (function d(){x.clearRect(0,0,W,H);
   for(let i=0;i<N.length;i++){const a=N[i];a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
@@ -146,7 +177,7 @@ document.querySelectorAll('.panel').forEach(p=>{p.addEventListener('mouseenter',
   requestAnimationFrame(d)})()})();
 /* p2 mini stars */
 (function(){const c=document.getElementById('c2'),x=c.getContext('2d');let W,H,S=[];
- function rs(){W=c.width=c.clientWidth;H=c.height=c.clientHeight;S=[];for(let i=0;i<90;i++)S.push({x:Math.random()*W,y:Math.random()*H,z:.2+Math.random()*.9})}
+ function rs(){W=c.width=c.clientWidth||300;H=c.height=c.clientHeight||600;S=[];for(let i=0;i<90;i++)S.push({x:Math.random()*W,y:Math.random()*H,z:.2+Math.random()*.9})}
  rs();addEventListener('resize',rs);
  (function d(){x.clearRect(0,0,W,H);
   S.forEach(s=>{s.y+=s.z*.3;if(s.y>H)s.y=0;
